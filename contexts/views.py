@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+
 
 # Create your views here.
 def infer(request):
-    return render(request, 'infer.html')
+    print("infering")
+    return JsonResponse({'error':'model not ready'})
