@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^user/', include('users.urls')),
+    url(r'^custom_user/', include('custom_users.urls')),
     url(r'^context/', include('contexts.urls')),
     url(r'^data/', include('data.urls')),
 ]
