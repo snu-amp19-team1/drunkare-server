@@ -6,6 +6,10 @@ import sklearn
 import glob
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from datetime import datetime
 
 from os import path
@@ -13,8 +17,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import OneHotEncoder
 
-
-def get_train_test():
+def load_data():
     filename_queue=glob.glob('./rawdata/data[1-4].csv')
     n_data=[]
     training_set=[]
@@ -69,33 +72,35 @@ def get_train_test():
 
     return training_set, training_label, test_set, test_label
 
-def load_model(model='RF'):
+def geT_accuracy(model='RF'):
 
-    training_set, training_label, test_set, test_label = get_train_test()
+    trainX, trainY, testX, testY = load_data()
     if path.isfile('models/{}'.format(model)):
         with open('models/{}'.format(model), 'rb') as f:
             clf = cPickle.load(f)
         
     else:
-        X=training_set
-        y=training_label
-        if model=='SVM':
+        if model=='SVM': #0.75
             clf = SVC(gamma='scale',tol=0.1)
-        elif model=='RF':
+        elif model=='RF': #0.8275
             clf = RandomForestClassifier(max_depth=20,n_estimators=250)
-
-        clf.fit(X,y)
+        elif model=='NB': # 0.7159
+            clf = GaussianNB()
+        elif model=='KNN': #0.6136
+            clf = KNeighborsClassifier(n_neighbors=10)
+        clf.fit(trainX,trainY)
+        
         with open('models/{}'.format(model), 'wb') as f:
             cPickle.dump(clf, f)
     
 
     
-    test_pred1=clf.predict(test_set)
+    pred=clf.predict(testX)
 
     ohc=OneHotEncoder(categories=[range(16)])
-    onehot_pred1=test_pred1.reshape(-1,1)
-    onehot_pred1=ohc.fit_transform(onehot_pred1).toarray()
+    onehot_pred=pred.reshape(-1,1)
+    onehot_pred=ohc.fit_transform(onehot_pred).toarray()
 
-    print(accuracy_score(test_pred1,test_label))
+    print(accuracy_score(pred,testY))
 
-load_model()
+geT_accuracy('RF')
