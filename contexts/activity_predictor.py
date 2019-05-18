@@ -2,17 +2,16 @@ import csv
 import _pickle as cPickle
 import numpy as np
 import pandas as pd
-import sklearn
+from os import path
+from datetime import datetime
 import glob
+
+import sklearn
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-from datetime import datetime
-
-from os import path
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import OneHotEncoder
@@ -100,7 +99,6 @@ def geT_accuracy(model='RF'):
     ohc=OneHotEncoder(categories=[range(16)])
     onehot_pred=pred.reshape(-1,1)
     onehot_pred=ohc.fit_transform(onehot_pred).toarray()
-
     print(accuracy_score(pred,testY))
 
 geT_accuracy('RF')
