@@ -23,10 +23,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import OneHotEncoder
 
-def load_data(model):
+def load_data(model, n_steps=None, n_length=None, n_features=None):
     filename_queue=glob.glob('./rawdata/data[1-4].csv')
     if model in ['SVM', 'RF', 'NB', 'KNN']:
-        n_data=[]
         trainX=[]
         testX=[]
         trainY=[]
@@ -79,14 +78,11 @@ def load_data(model):
 
         return trainX, trainY, testX, testY
     else:
-        dataX = []
-        dataY = []
         trainX=[]
         testX=[]
         trainY=[]
         testY=[]
         label_count=np.zeros(16)
-
         for filename in filename_queue:
             file=open(filename, newline='')
             reader=csv.reader(file)
@@ -125,31 +121,35 @@ def load_data(model):
         #one-hot encode
         trainY = to_categorical(trainY)
         testY = to_categorical(testY)
-
+        
+        
+            
         return trainX, trainY, testX, testY
 
 
-def create_model(model, trainX=None, trainY=None):
+def create_model(model, n_features=None, n_outputs=None):
     
-    if model=='SVM': #0.75
-        clf = SVC(gamma='scale',tol=0.1)
-    elif model=='RF': #0.8275
-        clf = RandomForestClassifier(max_depth=20,n_estimators=250)
-    elif model=='NB': # 0.7159
-        clf = GaussianNB()
-    elif model=='KNN': #0.6136
-        clf = KNeighborsClassifier(n_neighbors=10)
+    if model in ['SVM', 'RF', 'NB', 'KNN']:
+        if model=='SVM': #0.75
+            clf = SVC(gamma='scale',tol=0.1)
+        elif model=='RF': #0.8275
+            clf = RandomForestClassifier(max_depth=20,n_estimators=250)
+        elif model=='NB': # 0.7159
+            clf = GaussianNB()
+        elif model=='KNN': #0.6136
+            clf = KNeighborsClassifier(n_neighbors=10)
+        return clf
     else:
-        n_timesteps, n_features, n_outputs = trainX.shape[1], trainX.shape[2], trainY.shape[1]
+        
         
         if model=='CNN_LSTM':
+            n_steps, n_length = 10,15
             n_lstm_cell = 128 #number of lstm cells
             epochs=32 #training epoch
             n_fc_cell = 32 #numer of fc layer cells
             dropout = 0.4 #dropout rate
             pool_size=1
             batch_size = 32
-            n_steps, n_length = 10,15
             
             clf = Sequential()
             clf.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu'), input_shape=(None,n_length,n_features)))
@@ -164,6 +164,7 @@ def create_model(model, trainX=None, trainY=None):
             clf.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         elif model=='CONV_LSTM':
+            n_steps, n_length = 10,15
             dropout = 0.4
             n_fc_cell = 32
             epochs= 20
@@ -178,36 +179,61 @@ def create_model(model, trainX=None, trainY=None):
             clf.add(Dense(n_outputs, activation='softmax'))
             clf.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         
-    return clf
+        return clf, n_steps, n_length
         
 
 def get_accuracy(model='RF'):
     
     trainX, trainY, testX, testY = load_data(model)
     
+    # first try load
+    
     if path.isfile('pretrained/{}'.format(model)):
+        if model in ['CNN_LSTM', 'CONV_LSTM']:
+            n_features, n_outputs = trainX.shape[2], trainY.shape[1]
+            _, n_steps, n_length = create_model(model, n_features, n_outputs)
+
+
         with open('pretrained/{}'.format(model), 'rb') as f:
             clf = cPickle.load(f)
-    
+        
         
     else:
-        if model =='CNN_LSTM':
-            clf = create_model(model, trainX, trainY)
+
+        # train model
+        if model == 'CNN_LSTM':
+            n_features, n_outputs = trainX.shape[2], trainY.shape[1]
+            clf, n_steps, n_length = create_model(model, n_features, n_outputs)
+
+            trainX = trainX.reshape((trainX.shape[0], n_steps, n_length, n_features))
             clf.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
-        elif model== 'CONV_LSTM':
-            clf = create_model(model, trainX, trainY)
+
+        elif model == 'CONV_LSTM':
+            n_features, n_outputs = trainX.shape[2], trainY.shape[1]
+            clf, n_steps, n_length = create_model(model, n_features, n_outputs)
+            
+            trainX = trainX.reshape((trainX.shape[0], n_steps, 1, n_length, n_features))
             clf.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
         else:
             clf = create_model(model)
             clf.fit(trainX,trainY)
 
+        # save model
         with open('pretrained/{}'.format(model), 'wb') as f:
             cPickle.dump(clf, f)
     
 
-    if model in ['CNN_LSTM', 'CONV_LSTM']:
-        _, accuracy = model.evaluate(testX, testY, batch_size=32, verbose=0)
+    if model == 'CNN_LSTM':
+        testX = testX.reshape((testX.shape[0], n_steps, n_length, n_features))
+        _, accuracy = clf.evaluate(testX, testY, batch_size=32, verbose=0)
         print(accuracy)
+
+    elif model =='CONV_LSTM':
+        testX = testX.reshape((testX.shape[0], n_steps, 1, n_length, n_features))
+        _, accuracy = clf.evaluate(testX, testY, batch_size=32, verbose=0)
+        print(accuracy)
+
+        
     else:
         pred=clf.predict(testX)
         ohc=OneHotEncoder(categories=[range(16)])
@@ -215,4 +241,4 @@ def get_accuracy(model='RF'):
         onehot_pred=ohc.fit_transform(onehot_pred).toarray()
         print(accuracy_score(pred,testY))
 
-get_accuracy('CNN_LSTM')
+get_accuracy('CONV_LSTM')
