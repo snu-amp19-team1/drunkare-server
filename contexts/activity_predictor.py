@@ -1,4 +1,5 @@
 import csv
+import os
 import _pickle as cPickle
 import numpy as np
 import pandas as pd
@@ -23,9 +24,11 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import OneHotEncoder
 
-def load_data(model, n_steps=None, n_length=None, n_features=None):
-    filename_queue=glob.glob('./rawdata/data[1-4].csv')
-    if model in ['SVM', 'RF', 'NB', 'KNN']:
+module_dir = os.path.dirname(__file__)
+
+def load_data(model_name, n_steps=None, n_length=None, n_features=None):
+    filename_queue=glob.glob(module_dir+'/rawdata/data[1-4].csv')
+    if model_name in ['SVM', 'RF', 'NB', 'KNN']:
         trainX=[]
         testX=[]
         trainY=[]
@@ -37,8 +40,10 @@ def load_data(model, n_steps=None, n_length=None, n_features=None):
             
             reader=csv.reader(file)
             header=next(reader)
+            read = list(reader)
+            random.shuffle(read)
             
-            for row in reader:
+            for row in read:
                 row[4:]=[float(i) for i in row[4:]]
                 date=datetime.strptime(row[0],'%Y/%m/%d')
                 msec=row[1:3]
@@ -127,22 +132,22 @@ def load_data(model, n_steps=None, n_length=None, n_features=None):
         return trainX, trainY, testX, testY
 
 
-def create_model(model, n_features=None, n_outputs=None):
+def create_model(model_name, n_features=None, n_outputs=None):
     
-    if model in ['SVM', 'RF', 'NB', 'KNN']:
-        if model=='SVM': #0.75
-            clf = SVC(gamma='scale',tol=0.1)
-        elif model=='RF': #0.8275
-            clf = RandomForestClassifier(max_depth=20,n_estimators=250)
-        elif model=='NB': # 0.7159
-            clf = GaussianNB()
-        elif model=='KNN': #0.6136
-            clf = KNeighborsClassifier(n_neighbors=10)
-        return clf
+    if model_name in ['SVM', 'RF', 'NB', 'KNN']:
+        if model_name=='SVM': #0.75
+            model = SVC(gamma='scale',tol=0.1)
+        elif model_name=='RF': #0.8275
+            model = RandomForestClassifier(max_depth=20,n_estimators=250)
+        elif model_name=='NB': # 0.7159
+            model = GaussianNB()
+        elif model_name=='KNN': #0.6136
+            model = KNeighborsClassifier(n_neighbors=10)
+        return model
     else:
         
         
-        if model=='CNN_LSTM':
+        if model_name=='CNN_LSTM':
             n_steps, n_length = 10,15
             n_lstm_cell = 128 #number of lstm cells
             epochs=32 #training epoch
@@ -151,19 +156,19 @@ def create_model(model, n_features=None, n_outputs=None):
             pool_size=1
             batch_size = 32
             
-            clf = Sequential()
-            clf.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu'), input_shape=(None,n_length,n_features)))
-            clf.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu')))
-            clf.add(TimeDistributed(Dropout(dropout)))
-            clf.add(TimeDistributed(MaxPooling1D(pool_size=pool_size)))
-            clf.add(TimeDistributed(Flatten()))
-            clf.add(LSTM(n_lstm_cell))
-            clf.add(Dropout(dropout))
-            clf.add(Dense(n_fc_cell, activation='relu'))
-            clf.add(Dense(n_outputs, activation='softmax'))
-            clf.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+            model = Sequential()
+            model.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu'), input_shape=(None,n_length,n_features)))
+            model.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu')))
+            model.add(TimeDistributed(Dropout(dropout)))
+            model.add(TimeDistributed(MaxPooling1D(pool_size=pool_size)))
+            model.add(TimeDistributed(Flatten()))
+            model.add(LSTM(n_lstm_cell))
+            model.add(Dropout(dropout))
+            model.add(Dense(n_fc_cell, activation='relu'))
+            model.add(Dense(n_outputs, activation='softmax'))
+            model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        elif model=='CONV_LSTM':
+        elif model_name=='CONV_LSTM':
             n_steps, n_length = 10,15
             dropout = 0.4
             n_fc_cell = 32
@@ -171,74 +176,123 @@ def create_model(model, n_features=None, n_outputs=None):
             batch_size=32
             n_steps, n_length = 10,15
 
-            clf = Sequential()
-            clf.add(ConvLSTM2D(filters=64, kernel_size=(1,3), activation='relu', input_shape=(n_steps, 1, n_length, n_features)))
-            clf.add(Dropout(dropout))
-            clf.add(Flatten())
-            clf.add(Dense(n_fc_cell, activation='relu'))
-            clf.add(Dense(n_outputs, activation='softmax'))
-            clf.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+            model = Sequential()
+            model.add(ConvLSTM2D(filters=64, kernel_size=(1,3), activation='relu', input_shape=(n_steps, 1, n_length, n_features)))
+            model.add(Dropout(dropout))
+            model.add(Flatten())
+            model.add(Dense(n_fc_cell, activation='relu'))
+            model.add(Dense(n_outputs, activation='softmax'))
+            model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         
-        return clf, n_steps, n_length
+        return model, n_steps, n_length
         
 
-def get_accuracy(model='RF'):
+def get_accuracy(model_name='RF'):
     
-    trainX, trainY, testX, testY = load_data(model)
+    trainX, trainY, testX, testY = load_data(model_name)
     
     # first try load
     
-    if path.isfile('pretrained/{}'.format(model)):
-        if model in ['CNN_LSTM', 'CONV_LSTM']:
+    if path.isfile(module_dir+'/pretrained/{}'.format(model_name)):
+        if model_name in ['CNN_LSTM', 'CONV_LSTM']:
             n_features, n_outputs = trainX.shape[2], trainY.shape[1]
-            _, n_steps, n_length = create_model(model, n_features, n_outputs)
+            _, n_steps, n_length = create_model(model_name, n_features, n_outputs)
 
 
-        with open('pretrained/{}'.format(model), 'rb') as f:
-            clf = cPickle.load(f)
+        with open(module_dir+'/pretrained/{}'.format(model_name), 'rb') as f:
+            model = cPickle.load(f)
         
         
     else:
 
         # train model
-        if model == 'CNN_LSTM':
+        if model_name == 'CNN_LSTM':
             n_features, n_outputs = trainX.shape[2], trainY.shape[1]
-            clf, n_steps, n_length = create_model(model, n_features, n_outputs)
+            model, n_steps, n_length = create_model(model_name, n_features, n_outputs)
 
             trainX = trainX.reshape((trainX.shape[0], n_steps, n_length, n_features))
-            clf.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
+            model.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
 
-        elif model == 'CONV_LSTM':
+        elif model_name == 'CONV_LSTM':
             n_features, n_outputs = trainX.shape[2], trainY.shape[1]
-            clf, n_steps, n_length = create_model(model, n_features, n_outputs)
+            model, n_steps, n_length = create_model(model_name, n_features, n_outputs)
             
             trainX = trainX.reshape((trainX.shape[0], n_steps, 1, n_length, n_features))
-            clf.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
+            model.fit(trainX, trainY, epochs=32, batch_size=32, verbose=0)
         else:
-            clf = create_model(model)
-            clf.fit(trainX,trainY)
+            model = create_model(model_name)
+            model.fit(trainX,trainY)
 
         # save model
-        with open('pretrained/{}'.format(model), 'wb') as f:
-            cPickle.dump(clf, f)
+        with open(module_dir+'/pretrained/{}'.format(model_name), 'wb') as f:
+            cPickle.dump(model, f)
     
 
-    if model == 'CNN_LSTM':
+    if model_name == 'CNN_LSTM':
         testX = testX.reshape((testX.shape[0], n_steps, n_length, n_features))
-        _, accuracy = clf.evaluate(testX, testY, batch_size=32, verbose=0)
+        _, accuracy = model.evaluate(testX, testY, batch_size=32, verbose=0)
         print(accuracy)
 
-    elif model =='CONV_LSTM':
+    elif model_name =='CONV_LSTM':
         testX = testX.reshape((testX.shape[0], n_steps, 1, n_length, n_features))
-        _, accuracy = clf.evaluate(testX, testY, batch_size=32, verbose=0)
+        _, accuracy = model.evaluate(testX, testY, batch_size=32, verbose=0)
         print(accuracy)
 
         
     else:
-        pred=clf.predict(testX)
+        pred=model.predict(testX)
         ohc=OneHotEncoder(categories=[range(16)])
         onehot_pred=pred.reshape(-1,1)
         onehot_pred=ohc.fit_transform(onehot_pred).toarray()
         print(accuracy_score(pred,testY))
 
-get_accuracy('CONV_LSTM')
+
+# ML models
+# input: (180,batch) np array -> output: length batch list
+# DL models
+# input: (180,batch) np array -> output: length batch list
+
+def predict_activity(data=None, batch = 2, model_name='RF'):
+
+    trainX, trainY, testX, testY = load_data(model_name)
+    
+    if data == None:
+        if model_name in ['CNN_LSTM', 'CONV_LSTM']:
+            data = np.array(testX[:batch])
+        else:    
+            data = np.array(testX[:batch])
+    
+    data = data.reshape(batch,-1)
+
+    # first try to load model
+    if path.isfile(module_dir+'/pretrained/{}'.format(model_name)):
+        if model_name in ['CNN_LSTM', 'CONV_LSTM']:
+            n_features, n_outputs = trainX.shape[2], trainY.shape[1]
+            _, n_steps, n_length = create_model(model_name, n_features, n_outputs)
+
+
+        with open(module_dir+'/pretrained/{}'.format(model_name), 'rb') as f:
+            model = cPickle.load(f)
+
+        if model_name == 'CNN_LSTM':
+            data = data.reshape((batch, n_steps, n_length, n_features))
+            pred_probs = model.predict(data, batch_size=batch, verbose=0)
+            pred = [np.argmax(pred_prob).item() for pred_prob in pred_probs]
+            
+            return pred
+    
+        elif model_name =='CONV_LSTM':
+            data = data.reshape((batch, n_steps, 1, n_length, n_features))
+            pred_probs = model.predict(data, batch_size=batch, verbose=0)
+            pred = [np.argmax(pred_prob).item() for pred_prob in pred_probs]
+            
+            return pred
+            
+        else:
+            pred = model.predict(data).tolist()
+            
+            return pred
+        
+    else:
+        print("model doesn't exist. train the models first.")
+        return None
