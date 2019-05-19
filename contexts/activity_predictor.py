@@ -296,3 +296,6 @@ def predict_activity(data=None, batch = 2, model_name='RF'):
     else:
         print("model doesn't exist. train the models first.")
         return None
+
+def predict_context():
+    return None
