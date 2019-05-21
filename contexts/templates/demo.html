@@ -1,1 +1,57 @@
 <!-- demo template comes here -->
+<!DOCTYPE html>
+<html class="uk-height-1-1">
+    <head>
+        <title>Drunkare-demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/uikit.css" />
+        <script src="js/uikit.min.js"></script>
+        <script src="js/uikit-icons.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    </head>
+    <body class="uk-height-1-1">
+        <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
+            <div class="uk-width-1-2 uk-height-1-1">
+                <!-- User 1 -->
+                <div class="uk-padding-small uk-background-muted">
+                  <canvas id="user1" class="uk-height-medium"></canvas>
+                </div>
+                <div class="uk-padding uk-background-muted">
+                    <h1><span class="uk-text-primary">User1 is "Desk" context</span></h1>
+                    <button onclick="setUpdateTime_user1()" class="uk-button uk-button-primary">UPDATE</button>
+                    <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
+                </div>
+            </div>
+            <div class="uk-width-1-2 uk-height-1-1">
+                <!-- User 2 -->
+                <div class="uk-padding-small uk-background-primary">
+                  <canvas id="user2" class="uk-height-medium"></canvas>
+                </div>
+                <div class="uk-padding uk-light uk-background-primary">
+                    <h1>User2 is "Cafe" context</h1>
+                    <button onclick="setUpdateTime_user2()" class="uk-button uk-button-default">UPDATE</button>
+                    <h5 class="uk-heading-line"><span id="time2">- Updated</span></h5>
+                </div>
+            </div>
+        </div>
+        <script src="js/chart.js"></script>
+        <script>
+            // Initialization
+            var dt = new Date();
+            document.getElementById("time1").innerText = dt.toLocaleString() + " Updated";
+            document.getElementById("time2").innerText = dt.toLocaleString() + " Updated";
+
+            // function
+            function setUpdateTime_user1() {
+              var dt = new Date();
+              document.getElementById("time1").innerText = dt.toLocaleString() + " Updated";
+            }
+
+            function setUpdateTime_user2() {
+              var dt = new Date();
+              document.getElementById("time2").innerText = dt.toLocaleString() + " Updated";
+            }
+        </script>
+    </body>
+</html>
