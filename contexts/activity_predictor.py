@@ -27,7 +27,7 @@ from sklearn.preprocessing import OneHotEncoder
 module_dir = os.path.dirname(__file__)
 
 def load_data(model_name, n_steps=None, n_length=None, n_features=None):
-    filename_queue=glob.glob(module_dir+'/rawdata/data[1-4].csv')
+    filename_queue=glob.glob(module_dir+'/rawdata/data[1-5].csv')
     if model_name in ['SVM', 'RF', 'NB', 'KNN']:
         trainX=[]
         testX=[]
@@ -311,5 +311,3 @@ def predict_context():
             Y_data=row[1503:3003]
             Z_data=row[3003:4503]
         print(time,context,sensor)
-
-# predict_context()
