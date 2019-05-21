@@ -1,1 +1,6 @@
 Django==2.2
+numpy
+pandas
+tensorflow
+keras
+sklearn
