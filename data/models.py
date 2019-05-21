@@ -4,13 +4,11 @@ from django.db import models
 class RawDataRecord(models.Model):
     record_id = models.AutoField(primary_key=True)
     timestamp = models.DateTimeField()
-    X_acc = models.CharField(max_length=1000)
-    Y_acc = models.CharField(max_length=1000)
-    Z_acc = models.CharField(max_length=1000)
-    X_gyro = models.CharField(max_length=1000)
-    Y_gyro = models.CharField(max_length=1000)
-    Z_gyro = models.CharField(max_length=1000)
-
+    data_type = models.IntegerField(blank=True,default=0)
+    x = models.TextField(blank=True,default='')
+    y = models.TextField(blank=True,default='')
+    z = models.TextField(blank=True,default='')
+    
     class Meta:
         managed = True
     
