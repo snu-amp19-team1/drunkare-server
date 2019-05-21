@@ -16,9 +16,7 @@ def data(request):
             accel = received_json_data['accel']
             x = accel['x']
             y = accel['y']
-            z = accel['z']
-            print(x)
-            
+            z = accel['z']            
             RawDataRecord.objects.create(
             data_type=0,
             x=x,
