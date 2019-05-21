@@ -22,3 +22,10 @@ def infer(request):
         # context = predict_context()
 
         return JsonResponse({"activities":activities_dump})
+
+def demo(request):
+        try:
+                user_id = int(request.GET.get('user_id'))
+        except:
+                pass
+        return render(request, 'demo.html')
