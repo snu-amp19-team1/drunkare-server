@@ -19,5 +19,5 @@ activities = [
     'using a mouse',
     ]
 
-for activity in activities:
-    Activity.objects.create(activity_label=activity)
+for i,activity in enumerate(activities):
+    Activity.objects.create(activity_label=activity,activity_id = i)
