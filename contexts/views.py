@@ -13,9 +13,12 @@ def infer(request):
         activities = predict_activity(model_name="RF")
         activities_dump = json.dumps(activities)
 
-        activities_label = [Activity.objects.get(activity_id=pred).activity_label for pred in activities]
-        print(activities_label)
+        try:
+                activities_label = [Activity.objects.get(activity_id=pred).activity_label for pred in activities]
+                print(activities_label)
+        except:
+                pass
         
-        context = predict_context()
+        # context = predict_context()
 
         return JsonResponse({"activities":activities_dump})

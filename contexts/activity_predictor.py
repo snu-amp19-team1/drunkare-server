@@ -298,4 +298,18 @@ def predict_activity(data=None, batch = 2, model_name='RF'):
         return None
 
 def predict_context():
-    return None
+    filename_queue=glob.glob('./rawdata/compdata[1-3].csv')
+
+    with open(filename_queue[0], newline='') as f:
+        reader=csv.reader(f)
+        
+        for row in reader:
+            time=int(row[0]) #minutewise
+            context=int(row[1]) #drink 0, eat 1, cafe 2, desk 3
+            sensor=int(row[2]) #acc:0 gyro:2
+            X_data=row[3:1503]
+            Y_data=row[1503:3003]
+            Z_data=row[3003:4503]
+        print(time,context,sensor)
+
+# predict_context()
