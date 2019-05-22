@@ -15,7 +15,7 @@ var user_data1 = {
     }]
 }
 
-var chart = new Chart(ctx, {
+var chart1 = new Chart(ctx, {
     type: 'pie',
     data: user_data1,
     options: {
@@ -47,7 +47,7 @@ var user_data2 = {
     }]
 }
 
-var chart = new Chart(ctx, {
+var chart2 = new Chart(ctx, {
     type: 'pie',
     data: user_data2,
     options: {
