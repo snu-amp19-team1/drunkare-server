@@ -18,9 +18,9 @@
                 <!-- User 1 -->
                 <div class="uk-padding-small uk-margin-top uk-background-muted" style="height: 60%">
                   <canvas id="user1"></canvas>
-                </div>
+                </div>  
                 <div class="uk-padding uk-background-muted">
-                    <h1><span class="uk-heading-medium uk-text-primary">User1 is in the<br>"<span id="context1"></span>" context</span></h1>
+                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in the<br>"<span id="context1"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
@@ -30,20 +30,19 @@
                   <canvas id="user2"></canvas>
                 </div>
                 <div class="uk-padding uk-light uk-background-primary">
-                    <h1><span class="uk-heading-medium">User2 is in the<br>"<span id="context2"></span>" context</span></h1>
+                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in the<br>"<span id="context2"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
         </div>
-        <script src="{% static 'js/chart.js'%}"></script>
         <script>
             // Initialization
             var dt = new Date();
             $("#time1").text(dt.toLocaleString() + " Updated");
             $("#time2").text(dt.toLocaleString() + " Updated");
-            $("#context1").text("Desk"); // Arbitrary initial value
-            $("#context2").text("Cafe"); // Arbitrary initial value
-            setInterval(updateResult, 5000); // update period
+            $("#context1").text("{{ user1.current_context }}"); // Arbitrary initial value
+            $("#context2").text("{{ user2.current_context }}"); // Arbitrary initial value
+            setInterval(updateResult, 2000); // update period
 
             // function
             function update_time() {
@@ -54,30 +53,78 @@
             }
 
             function updateResult() {
-                $.getJSON('data.json', function(data) {
-                    $.each(data, function(index,entry){
-                        results[index][0] = entry.TouchingFace;
-                        results[index][1] = entry.Pouring;
-                        results[index][2] = entry.RaisingHand;
-                        results[index][3] = entry.TypingSmartphone;
-                        results[index][4] = entry.Jotting;
-                        results[index][5] = entry.Clinking;
-                        results[index][6] = entry.Drink1;
-                        results[index][7] = entry.Tissue;
-                        results[index][8] = entry.Drink2;
-                        results[index][9] = entry.Spoon;
-                        results[index][10] = entry.Chopstick;
-                        results[index][11] = entry.Photo;
-                        results[index][12] = entry.Fork;
-                        results[index][13] = entry.Stirring;
-                        results[index][14] = entry.Keyboard;
-                        results[index][15] = entry.Mouse;
-                    });
+                $.get('/custom_user/fetch', function(data) {
+                    users = JSON.parse(data['users']);
+                    user1 = users[0]['fields'];
+                    user2 = users[1]['fields'];
+                    console.log(user1['recent_activities']);
+                    console.log(user1['current_context']);
+                    console.log(user2['recent_activities']);
+                    console.log(user2['current_context']);
                     chart1.update()
                     chart2.update()
                     update_time()
-                })
+                });
             }
+
+            var activity_labels = {{ activity_labels|safe }};
+
+            var ctx1 = document.getElementById('user1').getContext('2d');
+            var user_data1 = {
+                labels: activity_labels,
+                datasets: [{
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                                    "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
+                    borderColor: 'transparent',
+                    data: {{user1.recent_activities}}
+                }]
+            }
+
+            var chart1 = new Chart(ctx1, {
+                type: 'pie',
+                data: user_data1,
+                options: {
+                    legend: {
+                    display: false
+                    },
+                    tooltips: {
+                    bodyFontSize: 30,
+                    bodyFontFamily: 'Karla'
+                    },
+                    responsive:true,
+                    maintainAspectRatio: false
+                }
+            });
+
+
+            /* USER2 */
+            var ctx2 = document.getElementById('user2').getContext('2d');
+            var user_data2 = {
+                labels: activity_labels,
+                datasets: [{
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                                    "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
+                    borderColor: 'transparent',
+                    data: {{user2.recent_activities}}
+                }]
+            }
+
+            var chart2 = new Chart(ctx2, {
+                type: 'pie',
+                data: user_data2,
+                options: {
+                    legend: {
+                    display: false
+                    },
+                    tooltips: {
+                    bodyFontSize: 30,
+                    bodyFontFamily: 'Karla'
+                    },
+                    responsive:true,
+                    maintainAspectRatio: false
+                }
+            });
+
         </script>
     </body>
 </html>
