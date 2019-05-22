@@ -7,9 +7,7 @@ from .models import Context, Activity
 from custom_users.models import CustomUser
 
 @csrf_exempt
-def infer(request):
-    if request.method == "POST":
-        print("infering")
+def update(request):
         
         activities = predict_activity(model_name="RF")
         activities_dump = json.dumps(activities)
