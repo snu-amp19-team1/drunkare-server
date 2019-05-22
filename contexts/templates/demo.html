@@ -51,9 +51,8 @@
               var dt = new Date();
               $("#time1").text(dt.toLocaleString() + " Updated");
 
-              // [TODO] Update result
+              // Update result
               getResult();
-              chart1.update()
             }
 
             function update_user2() {
@@ -61,9 +60,8 @@
               var dt = new Date();
               $("#time2").text(dt.toLocaleString() + " Updated");
 
-              // [TODO] Update result
+              // Update result
               getResult();
-              chart2.update()
             }
 
             function getResult() {
@@ -88,6 +86,8 @@
                     });
                     console.log(results);
                 })
+                chart1.update()
+                chart2.update()
             }
         </script>
     </body>
