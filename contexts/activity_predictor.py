@@ -27,7 +27,7 @@ from sklearn.preprocessing import OneHotEncoder
 module_dir = os.path.dirname(__file__)
 
 def load_data(model_name, n_steps=None, n_length=None, n_features=None):
-    filename_queue=glob.glob(module_dir+'/rawdata/data[1-4].csv')
+    filename_queue=glob.glob(module_dir+'/rawdata/data[1-5].csv')
     if model_name in ['SVM', 'RF', 'NB', 'KNN']:
         trainX=[]
         testX=[]
@@ -296,3 +296,21 @@ def predict_activity(data=None, batch = 2, model_name='RF'):
     else:
         print("model doesn't exist. train the models first.")
         return None
+<<<<<<< HEAD
+=======
+
+def predict_context():
+    filename_queue=glob.glob('./rawdata/compdata[1-3].csv')
+
+    with open(filename_queue[0], newline='') as f:
+        reader=csv.reader(f)
+        
+        for row in reader:
+            time=int(row[0]) #minutewise
+            context=int(row[1]) #drink 0, eat 1, cafe 2, desk 3
+            sensor=int(row[2]) #acc:0 gyro:2
+            X_data=row[3:1503]
+            Y_data=row[1503:3003]
+            Z_data=row[3003:4503]
+        print(time,context,sensor)
+>>>>>>> f8fa5ba04ad79c733e6c38e59e8688eb8378a98c
