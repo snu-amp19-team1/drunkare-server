@@ -37,7 +37,7 @@ def data(request):
                 z=z,
                 timestamp=dt
                 )
-            
+        #TODO: redirect to context for inference
     return HttpResponse(0)
 
 # Create your views here.
