@@ -9,6 +9,7 @@
         <script src="js/uikit.min.js"></script>
         <script src="js/uikit-icons.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     </head>
     <body class="uk-height-1-1">
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
@@ -19,7 +20,7 @@
                 </div>
                 <div class="uk-padding uk-background-muted">
                     <h1><span class="uk-text-primary">User1 is in the "<span id="context1"></span>" context</span></h1>
-                    <button onclick="setUpdateTime_user1()" class="uk-button uk-button-primary">UPDATE</button>
+                    <button onclick="update_user1()" class="uk-button uk-button-primary">UPDATE</button>
                     <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
@@ -30,29 +31,37 @@
                 </div>
                 <div class="uk-padding uk-light uk-background-primary">
                     <h1>User2 is in the "<span id="context2"></span>" context</h1>
-                    <button onclick="setUpdateTime_user2()" class="uk-button uk-button-default">UPDATE</button>
+                    <button onclick="update_user2()" class="uk-button uk-button-default">UPDATE</button>
                     <h5 class="uk-heading-line"><span id="time2">- Updated</span></h5>
                 </div>
             </div>
         </div>
-        <script src="js/chart.js"></script>
+        <script type="text/javascript" src="js/chart.js"></script>
         <script>
             // Initialization
             var dt = new Date();
-            document.getElementById("time1").innerText = dt.toLocaleString() + " Updated";
-            document.getElementById("time2").innerText = dt.toLocaleString() + " Updated";
-            document.getElementById("context1").innerText = "Desk";
-            document.getElementById("context2").innerText = "Cafe";
+            $("#time1").text(dt.toLocaleString() + " Updated");
+            $("#time2").text(dt.toLocaleString() + " Updated");
+            $("#context1").text("Desk");
+            $("#context2").text("Cafe");
 
             // function
-            function setUpdateTime_user1() {
+            function update_user1() {
+              // Update time
               var dt = new Date();
-              document.getElementById("time1").innerText = dt.toLocaleString() + " Updated";
+              $("#time1").text(dt.toLocaleString() + " Updated");
+
+              // [TODO] Update result
+
             }
 
-            function setUpdateTime_user2() {
+            function update_user2() {
+              // Update time
               var dt = new Date();
-              document.getElementById("time2").innerText = dt.toLocaleString() + " Updated";
+              $("#time2").text(dt.toLocaleString() + " Updated");
+
+              // [TODO] Update result
+
             }
         </script>
     </body>
