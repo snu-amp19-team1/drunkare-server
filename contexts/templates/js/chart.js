@@ -1,13 +1,12 @@
-/* Inference Result */
+/* Inference Result (Arbitrary initial value) */
 var results = [[3, 1, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 3], [5, 0, 0, 3, 7, 5, 0, 0, 2, 0, 0, 0, 0, 0, 6, 3]];
 
 /* USER1 */
-var ctx = document.getElementById('user1').getContext('2d');
+var ctx1 = document.getElementById('user1').getContext('2d');
 var user_data1 = {
     labels: ['Touching Face', 'Pouring', 'Raising hand', 'Typing smartphone', 'Jotting', 'Clinking', 'Drink1',
              'Tissue', 'Drink2', 'Spoon', 'Chopstick', 'Photo', 'Fork', 'Stirring', 'Keyboard', 'Mouse'],
     datasets: [{
-        label: 'My First dataset',
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                           "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
         borderColor: 'transparent',
@@ -15,7 +14,7 @@ var user_data1 = {
     }]
 }
 
-var chart1 = new Chart(ctx, {
+var chart1 = new Chart(ctx1, {
     type: 'pie',
     data: user_data1,
     options: {
@@ -33,13 +32,11 @@ var chart1 = new Chart(ctx, {
 
 
 /* USER2 */
-var ctx = document.getElementById('user2').getContext('2d');
-
+var ctx2 = document.getElementById('user2').getContext('2d');
 var user_data2 = {
     labels: ['Touching Face', 'Pouring', 'Raising hand', 'Typing smartphone', 'Jotting', 'Clinking', 'Drink1',
              'Tissue', 'Drink2', 'Spoon', 'Chopstick', 'Photo', 'Fork', 'Stirring', 'Keyboard', 'Mouse'],
     datasets: [{
-        label: 'My First dataset',
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                           "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
         borderColor: 'transparent',
@@ -47,7 +44,7 @@ var user_data2 = {
     }]
 }
 
-var chart2 = new Chart(ctx, {
+var chart2 = new Chart(ctx2, {
     type: 'pie',
     data: user_data2,
     options: {

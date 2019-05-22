@@ -20,7 +20,6 @@
                 </div>
                 <div class="uk-padding uk-background-muted">
                     <h1><span class="uk-text-primary">User1 is in the "<span id="context1"></span>" context</span></h1>
-                    <button onclick="update_user1()" class="uk-button uk-button-primary">UPDATE</button>
                     <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
@@ -31,7 +30,6 @@
                 </div>
                 <div class="uk-padding uk-light uk-background-primary">
                     <h1>User2 is in the "<span id="context2"></span>" context</h1>
-                    <button onclick="update_user2()" class="uk-button uk-button-default">UPDATE</button>
                     <h5 class="uk-heading-line"><span id="time2">- Updated</span></h5>
                 </div>
             </div>
@@ -42,29 +40,18 @@
             var dt = new Date();
             $("#time1").text(dt.toLocaleString() + " Updated");
             $("#time2").text(dt.toLocaleString() + " Updated");
-            $("#context1").text("Desk");
-            $("#context2").text("Cafe");
+            $("#context1").text("Desk"); // Arbitrary initial value
+            $("#context2").text("Cafe"); // Arbitrary initial value
+            setInterval(updateResult, 5000); // update period
 
             // function
-            function update_user1() {
+            function update_time() {
               // Update time
               var dt = new Date();
               $("#time1").text(dt.toLocaleString() + " Updated");
-
-              // Update result
-              getResult();
             }
 
-            function update_user2() {
-              // Update time
-              var dt = new Date();
-              $("#time2").text(dt.toLocaleString() + " Updated");
-
-              // Update result
-              getResult();
-            }
-
-            function getResult() {
+            function updateResult() {
                 $.getJSON('data.json', function(data) {
                     $.each(data, function(index,entry){
                         results[index][0] = entry.TouchingFace;
@@ -84,9 +71,9 @@
                         results[index][14] = entry.Keyboard;
                         results[index][15] = entry.Mouse;
                     });
-                    console.log(results);
                     chart1.update()
                     chart2.update()
+                    update_time()
                 })
             }
         </script>
