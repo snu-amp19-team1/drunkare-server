@@ -1,6 +1,5 @@
 /* Inference Result */
-var result1 = [3, 1, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 3]
-var result2 = [5, 0, 0, 3, 7, 5, 0, 0, 2, 0, 0, 0, 0, 0, 6, 3]
+var results = [[3, 1, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 3], [5, 0, 0, 3, 7, 5, 0, 0, 2, 0, 0, 0, 0, 0, 6, 3]];
 
 /* USER1 */
 var ctx = document.getElementById('user1').getContext('2d');
@@ -12,7 +11,7 @@ var user_data1 = {
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                           "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
         borderColor: 'transparent',
-        data: result1
+        data: results[0]
     }]
 }
 
@@ -44,7 +43,7 @@ var user_data2 = {
         backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                           "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
         borderColor: 'transparent',
-        data: result2
+        data: results[1]
     }]
 }
 

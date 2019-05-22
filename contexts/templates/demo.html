@@ -52,6 +52,7 @@
               $("#time1").text(dt.toLocaleString() + " Updated");
 
               // [TODO] Update result
+              getResult();
 
             }
 
@@ -61,7 +62,31 @@
               $("#time2").text(dt.toLocaleString() + " Updated");
 
               // [TODO] Update result
+              getResult();
+            }
 
+            function getResult() {
+                $.getJSON('data.json', function(data) {
+                    $.each(data, function(index,entry){
+                        results[index][0] = entry.TouchingFace;
+                        results[index][1] = entry.Pouring;
+                        results[index][2] = entry.RaisingHand;
+                        results[index][3] = entry.TypingSmartphone;
+                        results[index][4] = entry.Jotting;
+                        results[index][5] = entry.Clinking;
+                        results[index][6] = entry.Drink1;
+                        results[index][7] = entry.Tissue;
+                        results[index][8] = entry.Drink2;
+                        results[index][9] = entry.Spoon;
+                        results[index][10] = entry.Chopstick;
+                        results[index][11] = entry.Photo;
+                        results[index][12] = entry.Fork;
+                        results[index][13] = entry.Stirring;
+                        results[index][14] = entry.Keyboard;
+                        results[index][15] = entry.Mouse;
+                    });
+                    console.log(results);
+                })
             }
         </script>
     </body>

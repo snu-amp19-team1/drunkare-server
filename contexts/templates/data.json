@@ -1,9 +1,9 @@
 [
   {
-    "Touching Face": 0,
+    "TouchingFace": 0,
     "Pouring": 0,
-    "Raising hand": 0,
-    "Typing smartphone": 0,
+    "RaisingHand": 0,
+    "TypingSmartphone": 0,
     "Jotting": 0,
     "Clinking": 0,
     "Drink1": 0,
@@ -18,10 +18,10 @@
     "Mouse": 0
   },
   {
-    "Touching Face": 0,
+    "TouchingFace": 0,
     "Pouring": 0,
-    "Raising hand": 0,
-    "Typing smartphone": 0,
+    "RaisingHand": 0,
+    "TypingSmartphone": 0,
     "Jotting": 0,
     "Clinking": 0,
     "Drink1": 0,
