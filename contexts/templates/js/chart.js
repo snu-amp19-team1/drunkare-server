@@ -18,10 +18,14 @@ var chart = new Chart(ctx, {
     data: user_data1,
     options: {
         legend: {
-        display: false
-    },
-    responsive:true,
-    maintainAspectRatio: false
+          display: false
+        },
+        tooltips: {
+          bodyFontSize: 30,
+          bodyFontFamily: 'Karla'
+        },
+        responsive:true,
+        maintainAspectRatio: false
     }
 });
 
@@ -46,9 +50,13 @@ var chart = new Chart(ctx, {
     data: user_data2,
     options: {
         legend: {
-        display: false
-    },
-    responsive:true,
-    maintainAspectRatio: false
+          display: false
+        },
+        tooltips: {
+          bodyFontSize: 30,
+          bodyFontFamily: 'Karla'
+        },
+        responsive:true,
+        maintainAspectRatio: false
     }
 });
