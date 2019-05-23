@@ -36,88 +36,18 @@
             </div>
         </div>
         <script>
-            // Initialization
-            var dt = new Date();
-            $("#time1").text(dt.toLocaleString() + " Updated");
-            $("#time2").text(dt.toLocaleString() + " Updated");
-            $("#context1").text("{{ user1.current_context }}"); 
-            $("#context2").text("{{ user2.current_context }}"); 
-            var chart_data1 = {{user1.recent_activities}};
-            var chart_data2 = {{user2.recent_activities}};
-            
-            // make chart
+            /* ======= make chart ======= */
             var activity_labels = {{ activity_labels|safe }};
-
-            /* USER1 */
-            var ctx1 = document.getElementById('user1').getContext('2d');
-            var user_data1 = {
-                labels: activity_labels,
-                datasets: [{
-                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
-                                    "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
-                    borderColor: 'transparent',
-                    data: chart_data1
-                }]
-            }
-
-            var chart1 = new Chart(ctx1, {
-                type: 'pie',
-                data: user_data1,
-                options: {
-                    legend: {
-                    display: false
-                    },
-                    tooltips: {
-                    bodyFontSize: 30,
-                    bodyFontFamily: 'Karla'
-                    },
-                    responsive:true,
-                    maintainAspectRatio: false
-                }
-            });
-
-
-            /* USER2 */
-            var ctx2 = document.getElementById('user2').getContext('2d');
-            var user_data2 = {
-                labels: activity_labels,
-                datasets: [{
-                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
-                                    "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
-                    borderColor: 'transparent',
-                    data: chart_data2
-                }]
-            }
-
-            var chart2 = new Chart(ctx2, {
-                type: 'pie',
-                data: user_data2,
-                options: {
-                    legend: {
-                    display: false
-                    },
-                    tooltips: {
-                    bodyFontSize: 30,
-                    bodyFontFamily: 'Karla'
-                    },
-                    responsive:true,
-                    maintainAspectRatio: false
-                }
-            });
-
+            updateResult();
+            /* =============================== */
 
 
             
+            /* ======= update chart ======= */
             setInterval(updateResult, 10000); // update period
 
             // function
-            function update_time() {
-              // Update time
-              var dt = new Date();
-              $("#time1").text(dt.toLocaleString() + " Updated");
-              $("#time2").text(dt.toLocaleString() + " Updated");
-            }
-
+            
             function updateResult() {
                 $.get('/custom_user/fetch', function(data) {
                     users = JSON.parse(data['users']);
@@ -154,7 +84,7 @@
                     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 
 
-
+                    // rerender chart
                     var chart1 = new Chart(ctx1, {
                         type: 'pie',
                         data: user_data1,
@@ -185,10 +115,17 @@
                             maintainAspectRatio: false
                         }
                     });
-                    update_time();
+
+                    //update strings
+                    console.log(new Date(user1['last_update']))
+                    $("#time1").text(user1['last_update'] + " Updated");
+                    $("#time2").text(user2['last_update'] + " Updated");
+                    console.log(user1['current_context'])
+                    $("#context1").text(user1['current_context']); 
+                    $("#context2").text(user2['current_context']); 
                 });
             }
-
+            /* =============================== */
             
 
         </script>
