@@ -117,10 +117,11 @@
                     });
 
                     //update strings
-                    console.log(new Date(user1['last_update']))
-                    $("#time1").text(user1['last_update'] + " Updated");
-                    $("#time2").text(user2['last_update'] + " Updated");
-                    console.log(user1['current_context'])
+                    time1=new Date(user1['last_update']).toString();
+                    $("#time1").text(String(time1).substring(0,time1.length-17) + " Updated");
+                    time2=new Date(user2['last_update']).toString();
+                    $("#time2").text(String(time2).substring(0,time2.length-17) + " Updated");
+                    
                     $("#context1").text(user1['current_context']); 
                     $("#context2").text(user2['current_context']); 
                 });
