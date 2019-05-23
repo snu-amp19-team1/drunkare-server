@@ -40,35 +40,15 @@
             var dt = new Date();
             $("#time1").text(dt.toLocaleString() + " Updated");
             $("#time2").text(dt.toLocaleString() + " Updated");
-            $("#context1").text("{{ user1.current_context }}"); // Arbitrary initial value
-            $("#context2").text("{{ user2.current_context }}"); // Arbitrary initial value
-            setInterval(updateResult, 2000); // update period
-
-            // function
-            function update_time() {
-              // Update time
-              var dt = new Date();
-              $("#time1").text(dt.toLocaleString() + " Updated");
-              $("#time2").text(dt.toLocaleString() + " Updated");
-            }
-
-            function updateResult() {
-                $.get('/custom_user/fetch', function(data) {
-                    users = JSON.parse(data['users']);
-                    user1 = users[0]['fields'];
-                    user2 = users[1]['fields'];
-                    console.log(user1['recent_activities']);
-                    console.log(user1['current_context']);
-                    console.log(user2['recent_activities']);
-                    console.log(user2['current_context']);
-                    chart1.update()
-                    chart2.update()
-                    update_time()
-                });
-            }
-
+            $("#context1").text("{{ user1.current_context }}"); 
+            $("#context2").text("{{ user2.current_context }}"); 
+            var chart_data1 = {{user1.recent_activities}};
+            var chart_data2 = {{user2.recent_activities}};
+            
+            // make chart
             var activity_labels = {{ activity_labels|safe }};
 
+            /* USER1 */
             var ctx1 = document.getElementById('user1').getContext('2d');
             var user_data1 = {
                 labels: activity_labels,
@@ -76,7 +56,7 @@
                     backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                                     "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
                     borderColor: 'transparent',
-                    data: {{user1.recent_activities}}
+                    data: chart_data1
                 }]
             }
 
@@ -105,7 +85,7 @@
                     backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                                     "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
                     borderColor: 'transparent',
-                    data: {{user2.recent_activities}}
+                    data: chart_data2
                 }]
             }
 
@@ -124,6 +104,92 @@
                     maintainAspectRatio: false
                 }
             });
+
+
+
+            
+            setInterval(updateResult, 3000); // update period
+
+            // function
+            function update_time() {
+              // Update time
+              var dt = new Date();
+              $("#time1").text(dt.toLocaleString() + " Updated");
+              $("#time2").text(dt.toLocaleString() + " Updated");
+            }
+
+            function updateResult() {
+                $.get('/custom_user/fetch', function(data) {
+                    users = JSON.parse(data['users']);
+                    user1 = users[0]['fields'];
+                    user2 = users[1]['fields'];
+                    updated_chart_data1 = JSON.parse(user1['recent_activities']);
+                    user_data1 = {
+                        labels: activity_labels,
+                        datasets: [{
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                                            "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
+                            borderColor: 'transparent',
+                            data: updated_chart_data1
+                        }]
+                    }
+                    updated_chart_data2 = JSON.parse(user2['recent_activities']);
+                    user_data2 = {
+                        labels: activity_labels,
+                        datasets: [{
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                                            "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
+                            borderColor: 'transparent',
+                            data: updated_chart_data2
+                        }]
+                    }
+
+                    // clear canvas
+                    canvas1 = document.getElementById('user1');
+                    ctx1 = canvas1.getContext('2d');
+                    ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+
+                    canvas2 = document.getElementById('user2');
+                    ctx2 = canvas2.getContext('2d');
+                    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+
+
+                    var chart1 = new Chart(ctx1, {
+                        type: 'pie',
+                        data: user_data1,
+                        options: {
+                            legend: {
+                            display: false
+                            },
+                            tooltips: {
+                            bodyFontSize: 30,
+                            bodyFontFamily: 'Karla'
+                            },
+                            responsive:true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                    var chart2 = new Chart(ctx2, {
+                        type: 'pie',
+                        data: user_data2,
+                        options: {
+                            legend: {
+                            display: false
+                            },
+                            tooltips: {
+                            bodyFontSize: 30,
+                            bodyFontFamily: 'Karla'
+                            },
+                            responsive:true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                    update_time();
+                });
+            }
+
+            
 
         </script>
     </body>
