@@ -122,6 +122,22 @@
                     time2=new Date(user2['last_update']).toString();
                     $("#time2").text(String(time2).substring(0,time2.length-17) + " Updated");
                     
+                    if (user1['current_context'] == "drinking"){
+                        $("#context1").css('font-weight','Bold');
+                        $("#context1").css('color','red');
+                    }
+                    else{
+                        $("#context1").css('font-weight','');
+                        $("#context1").css('color','#1E87F0');
+                    }
+                    if (user2['current_context'] == "drinking"){
+                        $("#context2").css('font-weight','Bold');
+                        $("#context2").css('color','red');
+                    }
+                    else{
+                        $("#context2").css('font-weight','');
+                        $("#context2").css('color','white');
+                    }
                     $("#context1").text(user1['current_context']); 
                     $("#context2").text(user2['current_context']); 
                 });
