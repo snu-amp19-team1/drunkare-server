@@ -4,8 +4,8 @@ from contexts.models import Context
 contexts = [
     'drinking',
     'eating',
-    'at a cafe',
-    'at a desk',
+    'cafe',
+    'desk',
     ]
 
 for i,context in enumerate(contexts):
