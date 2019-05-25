@@ -9,7 +9,7 @@ import json
 # Create your views here.
 @csrf_exempt
 def fetch(request):
-    users = serializers.serialize('json',CustomUser.objects.all())
+    users = serializers.serialize('json',CustomUser.objects.filter(user_id__lte=1))
     users = json.loads(users)
     for user in users:
         label=Context.objects.get(context_id=user['fields']['current_context'])
