@@ -137,6 +137,7 @@ def data(request):
                         activity_count[activity]+=1
                 custom_user = CustomUser.objects.get(user_id=user_id)
                 custom_user.recent_activities = activity_count
+                custom_user.last_update = datetime.now()
                 custom_user.save()
             except Exception as e:
                 print("err while saving activity", e)
