@@ -16,20 +16,26 @@
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
             <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
                 <!-- User 1 -->
-                <div class="uk-padding-small uk-margin-top uk-background-muted" style="height: 60%">
+		<div class="uk-margin-top uk-background-muted">
+                  <h1><span uk-icon="icon: location; ratio: 3"></span><span class="uk-heading-small" style="font-weight:bold" id="location1"></span></h1>
+                </div>
+                <div class="uk-margin-top uk-background-muted" style="height: 60%">
                   <canvas id="user1"></canvas>
                 </div>  
-                <div class="uk-padding uk-background-muted">
+                <div class="uk-padding-small uk-background-muted">
                     <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in the<br>"<span id="context1"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
             <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
                 <!-- User 2 -->
-                <div class="uk-padding-small uk-margin-top uk-background-primary" style="height: 60%">
+		<div class="uk-margin-top uk-background-primary uk-light">
+                  <h1><span uk-icon="icon: location; ratio: 3"></span><span class="uk-heading-small uk-text-primary" style="font-weight:bold" id="location2"></span></h1>
+                </div>
+                <div class="uk-margin-top uk-background-primary" style="height: 60%">
                   <canvas id="user2"></canvas>
                 </div>
-                <div class="uk-padding uk-light uk-background-primary">
+                <div class="uk-padding-small uk-light uk-background-primary">
                     <h1><span class="uk-heading-medium">{{ user2.user_name }} is in the<br>"<span id="context2"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
                 </div>
@@ -140,6 +146,9 @@
                     }
                     $("#context1").text(user1['current_context']); 
                     $("#context2").text(user2['current_context']); 
+
+		    $("#location1").text(user1['current_location']);
+		    $("#location2").text(user2['current_location']);
 
                     console.log(user1['current_location'])
                     console.log(user2['current_location'])
