@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from contexts.views import update
-from .models import RawDataRecord, FeatureRecord, ActivityRecord
+from .models import RawDataRecord, FeatureRecord, ActivityInferenceRecord
 import requests
 import json
 import ast
@@ -21,9 +21,9 @@ def feature_extraction(window):
 @csrf_exempt
 def data(request):
     if request.method == "POST":
+
+        # parse POST data
         received_json_data = json.loads(request.body.decode("utf-8"))
-        
-        # save in DB
         ts = received_json_data['timestamps']
         dt = datetime.fromtimestamp(ts)
         user_id = received_json_data['user_id']
@@ -32,9 +32,18 @@ def data(request):
             accel = received_json_data['accel']
             x = accel['x']
             y = accel['y']
-            z = accel['z']            
+            z = accel['z']
+            data_type = 0
+        elif 'gyro' in received_json_data:
+            gyro = received_json_data['gyro']
+            x = gyro['x']
+            y = gyro['y']
+            z = gyro['z']
+            data_type = 1
+        # save in DB
+        try:
             RawDataRecord.objects.create(
-                data_type=0,
+                data_type=data_type,
                 x=x,
                 y=y,
                 z=z,
@@ -42,29 +51,18 @@ def data(request):
                 user_id= user_id,
                 index=index,
             )
-            
-        elif 'gyro' in received_json_data:
-            gyro = received_json_data['gyro']
-            x = gyro['x']
-            y = gyro['y']
-            z = gyro['z']
-            RawDataRecord.objects.create(
-                data_type=1,
-                x=x,
-                y=y,
-                z=z,
-                timestamp=dt,
-                user_id = user_id,
-                index=index,
-            )
-
+        except:
+            print("err while saving raw data")
+        
+        # if both acc & gyro are received, perform inference and update user status
         raw_data = RawDataRecord.objects.filter(user_id=user_id,index=index)
+
         if raw_data.count()==2:
             
+            # fetch data and make window
             accel = raw_data.get(data_type=0)
             gyro = raw_data.get(data_type=1)
             
-            # parse and make window
             X_acc=ast.literal_eval(accel.x)
             Y_acc=ast.literal_eval(accel.y)
             Z_acc=ast.literal_eval(accel.z)
@@ -78,25 +76,59 @@ def data(request):
                             X_gyro[25*x:25*x+25],Y_gyro[25*x:25*x+25],Z_gyro[25*x:25*x+25]])  
                 feature=feature_extraction(wind)
                 feature=feature.reshape(6,5)
-                ndata.append(feature)
 
                 # save feature
-                flattened= feature.flatten()
+                flattened= feature.flatten().tolist()
                 try:
                     feature_record = FeatureRecord.objects.create(
                         feature = flattened,
                         user_id = user_id,
+                        raw_data = accel,
+                        index=x,
                     )
-                except:
-                    print("err")
+                except Exception as e:
+                    print("err while saving feature", e)
                 ndata.append(feature_record.feature)
+            
+            # if previous raw data exists, add the last 5 seconds data at the front
+            prev_raw_data = RawDataRecord.objects.filter(user_id=user_id,index=index-1)
+            if prev_raw_data.count() == 2:
 
+                prev_accel = prev_raw_data.get(data_type=0)
+                # prev_gyro = prev_raw_data.get(data_type=1)
+
+                # X_acc=ast.literal_eval(prev_accel.x)
+                # Y_acc=ast.literal_eval(prev_accel.y)
+                # Z_acc=ast.literal_eval(prev_accel.z)
+                # X_gyro=ast.literal_eval(prev_gyro.x)
+                # Y_gyro=ast.literal_eval(prev_gyro.y)
+                # Z_gyro=ast.literal_eval(prev_gyro.z)
+
+                # if previous feature data exists, add the last 5 seconds data at the front
+                prev_feature_data = FeatureRecord.objects.filter(user_id=user_id, raw_data=prev_accel)
+                if prev_feature_data.count() == 60:
+                    try:
+                        last_5_features = prev_feature_data.filter(index__gte=55).order_by('index')
+                        ndata = [ast.literal_eval(feature.feature) for feature in last_5_features] + ndata
+
+                    except Exception as e:
+                        print("err while adding recent 5 sec data", e)
+
+            # perform inference
             ndata=np.array(ndata)
-            # TODO: infer with accumulated data and update user table
-            activities = update(ndata)
-            print(activities)
+            activities, activities_label = update(ndata)
+            print(activities_label)
 
-            return JsonResponse({"activities":activities})
+            # save activity inference result
+            try:
+                activity = ActivityInferenceRecord.objects.create(
+                    activity_inference=activities,
+                    user_id=user_id,
+                )
+            except Exception as e:
+                print("err while saving activity", e)
+            return HttpResponse(1)
+            
 
     if request.method == "GET":
         
@@ -156,6 +188,8 @@ def data(request):
             feature=feature_extraction(wind)
             feature=feature.reshape(6,5)
             flattened= feature.flatten()
+
+            # save feature
             try:
                 feature_record = FeatureRecord.objects.create(
                     feature = flattened,
@@ -168,10 +202,16 @@ def data(request):
         ndata=np.array(ndata)
         activities, activities_label = update(ndata)
         print(activities_label)
-        ActivityRecord.objects.create(
-            activity=activities,
-            user_id=user_id,
-        )
         
-        return JsonResponse({"activities":activities_label})
+        # save activity inference result
+        try:
+            activity = ActivityInferenceRecord.objects.create(
+                activity=activities,
+                user_id=user_id,
+            )
+        except:
+            print("err while saving activity")
+        
+        
+        return HttpResponse(2)
     return HttpResponse(0)
