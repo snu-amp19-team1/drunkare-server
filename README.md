@@ -10,9 +10,7 @@ The drunkare-server collects data from the smartwatch (drunkare-tizen) and the s
 `$ python3 manage.py migrate`
 
 3. initialize DB with prewritten scripts via django shell
-`$ cat db_init/db_activity.py | python3 manage.py shell`
-`$ cat db_init/db_context.py | python3 manage.py shell`
-`$ cat db_init/db_user.py | python3 manage.py shell`
+`$ . db_init.sh`
 
 4. run server
 `$ python3 manage.py runserver 0:{port}`
