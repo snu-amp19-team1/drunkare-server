@@ -8,7 +8,9 @@ class RawDataRecord(models.Model):
     x = models.TextField(blank=True,default='')
     y = models.TextField(blank=True,default='')
     z = models.TextField(blank=True,default='')
-    
+    user_id = models.IntegerField(blank=True,default=0)
+    index = models.IntegerField(blank=True,default=0)
+
     class Meta:
         managed = True
     
@@ -17,15 +19,23 @@ class RawDataRecord(models.Model):
 
 class FeatureRecord(models.Model):
     record_id = models.AutoField(primary_key=True)
-    timestamp = models.DateTimeField()
-    window_mean = models.FloatField()
-    window_stddev = models.FloatField()
-    window_median = models.FloatField()
-    window_percent25 = models.FloatField()
-    window_percent75 = models.FloatField()
+    feature = models.CharField(max_length=1000,default='')
+    user_id = models.IntegerField(blank=True,default=0)
 
     class Meta:
         managed = True
 
     def __str__(self):
-        return str(self.timestamp)
+        return str(self.record_id)
+
+
+class ActivityRecord(models.Model):
+    record_id = models.AutoField(primary_key=True)
+    activity = models.CharField(max_length=1000,default='')
+    user_id = models.IntegerField(blank=True,default=0)
+    
+    class Meta:
+        managed = True
+
+    def __str__(self):
+        return str(self.record_id)
