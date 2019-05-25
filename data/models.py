@@ -32,8 +32,9 @@ class FeatureRecord(models.Model): # exctracted features for each second
 
 class ActivityInferenceRecord(models.Model): #activity inference result for each minute
     record_id = models.AutoField(primary_key=True)
-    activity_inference = models.CharField(max_length=1000,default='')
+    activity_inference = models.CharField(max_length=3000,default='')
     user_id = models.IntegerField(blank=True,default=0)
+    index = models.IntegerField(blank=True, default=0)
     
     class Meta:
         managed = True
