@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from contexts.views import update
 from .models import RawDataRecord, FeatureRecord, ActivityInferenceRecord
+from custom_users.models import CustomUser
 import requests
 import json
 import ast
@@ -117,14 +118,26 @@ def data(request):
             # perform inference
             ndata=np.array(ndata)
             activities, activities_label = update(ndata)
-            print(activities_label)
+            # print(activities_label)
 
             # save activity inference result
             try:
                 activity = ActivityInferenceRecord.objects.create(
                     activity_inference=activities,
                     user_id=user_id,
+                    index=index,
                 )
+                recent_activity_record = ActivityInferenceRecord.objects.filter(
+                    user_id=user_id,
+                    index__gte=index-9,
+                )
+                activity_count = [0]*16
+                for activity_record in recent_activity_record:
+                    for activity in ast.literal_eval(activity_record.activity_inference):
+                        activity_count[activity]+=1
+                custom_user = CustomUser.objects.get(user_id=user_id)
+                custom_user.recent_activities = activity_count
+                custom_user.save()
             except Exception as e:
                 print("err while saving activity", e)
             return HttpResponse(1)
@@ -206,7 +219,7 @@ def data(request):
         # save activity inference result
         try:
             activity = ActivityInferenceRecord.objects.create(
-                activity=activities,
+                activity=activities_label,
                 user_id=user_id,
             )
         except:
