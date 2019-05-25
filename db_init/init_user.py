@@ -8,8 +8,8 @@ users = [
 ]
 
 recent_activities = [
-    '[0,4,5,1,2,0,6,0,0,4,5,1,2,0,6,0]',
-    '[5,0,1,2,1,2,4,0,6,0,0,6,0,0,4,5]',
+    '',
+    '',
 ]
 
 contexts=[
@@ -23,5 +23,10 @@ for i,user in enumerate(users):
         user_id = i,
         recent_activities=recent_activities[i],
         current_context=contexts[i],
-        last_update=datetime.now(),
         )
+
+CustomUser.objects.create(
+    user_name="test",
+    user_id = 2,
+    recent_activities='',
+    )
