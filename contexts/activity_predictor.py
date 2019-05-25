@@ -150,11 +150,9 @@ def create_model(model_name, n_features=None, n_outputs=None):
         if model_name=='CNN_LSTM':
             n_steps, n_length = 10,15
             n_lstm_cell = 128 #number of lstm cells
-            epochs=32 #training epoch
             n_fc_cell = 32 #numer of fc layer cells
             dropout = 0.4 #dropout rate
             pool_size=1
-            batch_size = 32
             
             model = Sequential()
             model.add(TimeDistributed(Conv1D(filters=64, kernel_size=3, activation='relu'), input_shape=(None,n_length,n_features)))
@@ -247,30 +245,29 @@ def get_accuracy(model_name='RF'):
         print(accuracy_score(pred,testY))
 
 
+def slide_window(data,stepSize,windowSize):
+    for x in range(0,len(data)-windowSize+1,stepSize):
+        yield(x,data[x:x+windowSize])
+
 # ML models
-# input: (180,batch) np array -> output: length batch list
+# input: (60,6,5) feature array 
+# slide and reshape to (55,180) 
+# infer 
+# output: 55 list
+
 # DL models
-# input: (180,batch) np array -> output: length batch list
+# ????
 
-def predict_activity(data=None, batch = 2, model_name='RF'):
-
-    trainX, trainY, testX, testY = load_data(model_name)
+def predict_minute(data=None, batch = 55, model_name='RF'):
     
-    if data == None:
-        if model_name in ['CNN_LSTM', 'CONV_LSTM']:
-            data = np.array(testX[:batch])
-        else:    
-            data = np.array(testX[:batch])
+    test_set=[]
+    for(x,window) in slide_window(data,1,6): 
+        wind=window.reshape(180)
+        test_set.append(wind)
     
-    data = data.reshape(batch,-1)
-
-    # first try to load model
+    # load model
     if path.isfile(module_dir+'/pretrained/{}'.format(model_name)):
-        if model_name in ['CNN_LSTM', 'CONV_LSTM']:
-            n_features, n_outputs = trainX.shape[2], trainY.shape[1]
-            _, n_steps, n_length = create_model(model_name, n_features, n_outputs)
-
-
+        
         with open(module_dir+'/pretrained/{}'.format(model_name), 'rb') as f:
             model = cPickle.load(f)
 
@@ -289,10 +286,12 @@ def predict_activity(data=None, batch = 2, model_name='RF'):
             return pred
             
         else:
-            pred = model.predict(data).tolist()
             
+            pred = model.predict(test_set).tolist()
+            print(len(pred))
             return pred
         
     else:
         print("model doesn't exist. train the models first.")
         return None
+
