@@ -8,6 +8,7 @@ from custom_users.models import CustomUser
 import requests
 import json
 import ast
+import time
 import numpy as np
 
 
@@ -41,6 +42,15 @@ def data(request):
             y = gyro['y']
             z = gyro['z']
             data_type = 1
+        
+        # if index = 0, check if this is the beginning of a new sequence
+        if index == 0:
+            if RawDataRecord.objects.filter(user_id=user_id,index=index).count() >= 2:
+                RawDataRecord.objects.filter(user_id=user_id).delete()
+                FeatureRecord.objects.filter(user_id=user_id).delete()
+                ActivityInferenceRecord.objects.filter(user_id=user_id).delete()
+                print("DB initialized")
+        
         # save in DB
         try:
             RawDataRecord.objects.create(
@@ -141,91 +151,32 @@ def data(request):
                 custom_user.save()
             except Exception as e:
                 print("err while saving activity", e)
-            return HttpResponse(1)
+        return HttpResponse(raw_data.count())
             
 
     if request.method == "GET":
         
         with open ('json_sample.json') as f:
             f_data = f.read()
-
-        received_json_data = json.loads(f_data)
-
         
-        ts = received_json_data['timestamps']
-        dt = datetime.fromtimestamp(ts)
-        user_id = received_json_data['user_id']
-        index = received_json_data['id']
-          
-        accel = received_json_data['gyro']
-        x = accel['x']
-        y = accel['y']
-        z = accel['z']
-        
-        accel = RawDataRecord(
-            data_type=0,
-            x=x,
-            y=y,
-            z=z,
-            timestamp=dt,
-            user_id= user_id,
-            index=index,
-        )
-        
-        gyro = received_json_data['gyro']
-        x = gyro['x']
-        y = gyro['y']
-        z = gyro['z']
-        gyro = RawDataRecord(
-            data_type=1,
-            x=x,
-            y=y,
-            z=z,
-            timestamp=dt,
-            user_id = user_id,
-            index=index,
-        )
-        
-        # parse and make window
-        X_acc=accel.x
-        Y_acc=accel.y
-        Z_acc=accel.z
-        X_gyro=gyro.x
-        Y_gyro=gyro.y
-        Z_gyro=gyro.z
-        
-        ndata=[]
-        for x in range(0,60): 
-            wind=np.array([X_acc[25*x:25*x+25],Y_acc[25*x:25*x+25],Z_acc[25*x:25*x+25],
-                        X_gyro[25*x:25*x+25],Y_gyro[25*x:25*x+25],Z_gyro[25*x:25*x+25]])  
+        for i in range (20):
             
-            feature=feature_extraction(wind)
-            feature=feature.reshape(6,5)
-            flattened= feature.flatten()
-
-            # save feature
-            try:
-                feature_record = FeatureRecord.objects.create(
-                    feature = flattened,
-                    user_id = user_id,
-                )
-            except:
-                print("err")
-            ndata.append(feature_record.feature)
+            for u_i in range(2):
+                
+                test_json = json.loads(f_data)
+                test_json['id'] = i
+                test_json['user_id'] = u_i
+                requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
+                
+                test_json = json.loads(f_data)
+                test_json['id'] = i
+                test_json['user_id'] = u_i
+                test_json['accel'] = test_json.pop('gyro')
+                requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
+            
+            
+            time.sleep(10)
+            
+            
         
-        ndata=np.array(ndata)
-        activities, activities_label = update(ndata)
-        print(activities_label)
-        
-        # save activity inference result
-        try:
-            activity = ActivityInferenceRecord.objects.create(
-                activity=activities_label,
-                user_id=user_id,
-            )
-        except:
-            print("err while saving activity")
-        
-        
-        return HttpResponse(2)
-    return HttpResponse(0)
+        return HttpResponse(0)
