@@ -53,7 +53,9 @@
             setInterval(updateResult, 10000); // update period
 
             // function
-            
+            var chart1;
+            var chart2;
+
             function updateResult() {
                 $.get('/custom_user/fetch', function(data) {
                     users = JSON.parse(data['users']);
@@ -84,14 +86,19 @@
                     canvas1 = document.getElementById('user1');
                     ctx1 = canvas1.getContext('2d');
                     ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+                    if (chart1){
+                        chart1.destroy();
+                    }
 
                     canvas2 = document.getElementById('user2');
                     ctx2 = canvas2.getContext('2d');
                     ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-
+                    if (chart2){
+                        chart2.destroy();
+                    }
 
                     // rerender chart
-                    var chart1 = new Chart(ctx1, {
+                    chart1 = new Chart(ctx1, {
                         type: 'pie',
                         data: user_data1,
                         options: {
@@ -106,7 +113,7 @@
                             maintainAspectRatio: false
                         }
                     });
-                    var chart2 = new Chart(ctx2, {
+                    chart2 = new Chart(ctx2, {
                         type: 'pie',
                         data: user_data2,
                         options: {
