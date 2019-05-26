@@ -20,7 +20,7 @@ class FeatureRecord(models.Model): # exctracted features for each second
     record_id = models.AutoField(primary_key=True)
     feature = models.CharField(max_length=1000,default='')
     user_id = models.IntegerField(blank=True,default=0)
-    raw_data = models.ForeignKey(RawDataRecord,models.DO_NOTHING, null=True,)
+    raw_data = models.ForeignKey(RawDataRecord,models.CASCADE, null=True,)
     index = models.IntegerField(blank=True, default=0)
 
     class Meta:
