@@ -1,5 +1,5 @@
 from contexts.models import Activity
-
+Activity.objects.all().delete()
 activities = [
     'touching face', 
     'pouring',
