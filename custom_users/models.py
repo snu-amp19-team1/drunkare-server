@@ -1,5 +1,5 @@
 from django.db import models
-from contexts.models import Activity,Context
+from contexts.models import Context
 # Create your models here.
 class CustomUser(models.Model):
     user_id = models.IntegerField(primary_key=True)

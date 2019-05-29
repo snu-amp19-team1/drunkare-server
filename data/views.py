@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from contexts.views import update
@@ -106,15 +105,7 @@ def data(request):
             if prev_raw_data.count() == 2:
 
                 prev_accel = prev_raw_data.get(data_type=0)
-                # prev_gyro = prev_raw_data.get(data_type=1)
-
-                # X_acc=ast.literal_eval(prev_accel.x)
-                # Y_acc=ast.literal_eval(prev_accel.y)
-                # Z_acc=ast.literal_eval(prev_accel.z)
-                # X_gyro=ast.literal_eval(prev_gyro.x)
-                # Y_gyro=ast.literal_eval(prev_gyro.y)
-                # Z_gyro=ast.literal_eval(prev_gyro.z)
-
+               
                 # if previous feature data exists, add the last 5 seconds data at the front
                 prev_feature_data = FeatureRecord.objects.filter(user_id=user_id, raw_data=prev_accel)
                 if prev_feature_data.count() == 60:

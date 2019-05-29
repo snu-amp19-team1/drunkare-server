@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from .models import CustomUser
 from contexts.models import Context
 from django.http import JsonResponse
