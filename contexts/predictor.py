@@ -6,7 +6,6 @@ import glob
 
 from .predictor_util import slide_window
 
-
 module_dir = os.path.dirname(__file__)
 
 # ML models
@@ -24,7 +23,7 @@ def predict_minute(data=None, batch = 55, model_name='RF'):
     for(x,window) in slide_window(data,1,6): 
         wind=window.reshape(180)
         test_set.append(wind)
-    print(len(test_set))
+    # print(len(test_set))
     
     # load model
     if path.isfile(module_dir+'/pretrained/{}'.format(model_name)):
@@ -49,7 +48,7 @@ def predict_minute(data=None, batch = 55, model_name='RF'):
         else:
             
             pred = model.predict(test_set).tolist()
-            print(len(pred))
+            # print(len(pred))
             return pred
         
     else:
@@ -57,9 +56,11 @@ def predict_minute(data=None, batch = 55, model_name='RF'):
         return None
 
 
-def predict_context():
+def predict_context(data=None):
     glob.glob(module_dir+'/rawdata/compdata[1-3].csv')
+    print(len(data))
     #drink 0, eat 1, cafe 2, desk 3
-    C
+    context = 3 # TOFIX
+    return context
 
         
