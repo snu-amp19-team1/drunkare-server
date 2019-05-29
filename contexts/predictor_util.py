@@ -2,8 +2,6 @@ import csv
 import os
 import _pickle as cPickle
 import numpy as np
-import pandas as pd
-import tensorflow as tf
 from os import path
 from datetime import datetime
 import glob
@@ -14,13 +12,10 @@ from keras.models import Sequential
 from keras.layers import Dense, Flatten, Dropout, LSTM, TimeDistributed, ConvLSTM2D
 from keras.layers.convolutional import Conv1D, MaxPooling1D
 
-import sklearn
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import OneHotEncoder
 
@@ -39,13 +34,13 @@ def load_data(model_name, n_steps=None, n_length=None, n_features=None):
             file=open(filename, newline='')
             
             reader=csv.reader(file)
-            header=next(reader)
+            next(reader)
             read = list(reader)
             random.shuffle(read)
             
             for row in read:
                 row[4:]=[float(i) for i in row[4:]]
-                date=datetime.strptime(row[0],'%Y/%m/%d')
+                datetime.strptime(row[0],'%Y/%m/%d')
                 msec=row[1:3]
                 label=int(row[3])
                 label_count[label]+=1
@@ -91,13 +86,13 @@ def load_data(model_name, n_steps=None, n_length=None, n_features=None):
         for filename in filename_queue:
             file=open(filename, newline='')
             reader=csv.reader(file)
-            header=next(reader)
+            next(reader)
             read = list(reader)
             random.shuffle(read)
 
             for row in read:
                 row[4:]=[float(i) for i in row[4:]]
-                date=datetime.strptime(row[0],'%Y/%m/%d')
+                datetime.strptime(row[0],'%Y/%m/%d')
                 label=int(row[3])
                 label_count[label]+=1
 
@@ -170,8 +165,6 @@ def create_model(model_name, n_features=None, n_outputs=None):
             n_steps, n_length = 10,15
             dropout = 0.4
             n_fc_cell = 32
-            epochs= 20
-            batch_size=32
             n_steps, n_length = 10,15
 
             model = Sequential()

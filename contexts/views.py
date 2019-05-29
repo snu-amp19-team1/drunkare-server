@@ -1,9 +1,6 @@
-import json
 from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from .predictor import predict_minute
-from .models import Context, Activity
+from .models import Activity
 from custom_users.models import CustomUser
 
 def update(data):
