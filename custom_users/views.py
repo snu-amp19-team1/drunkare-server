@@ -11,6 +11,9 @@ def fetch(request):
     users = serializers.serialize('json',CustomUser.objects.filter(user_id__lte=1))
     users = json.loads(users)
     for user in users:
-        label=Context.objects.get(context_id=user['fields']['current_context'])
-        user['fields']['current_context']=str(label)
+        try:
+            label=Context.objects.get(context_id=user['fields']['current_context'])
+            user['fields']['current_context']=str(label)
+        except:
+            user['fields']['current_context']=''
     return JsonResponse({"users": json.dumps(users)})
