@@ -1,8 +1,11 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-from contexts.views import update
+import time
+from django.utils.timezone import make_aware
+from contexts.predictor import predict_minute,predict_context
 from .models import RawDataRecord, FeatureRecord, ActivityInferenceRecord
+from contexts.models import Context
 from custom_users.models import CustomUser
 import requests
 import json
@@ -26,7 +29,7 @@ def data(request):
         # parse POST data
         received_json_data = json.loads(request.body.decode("utf-8"))
         ts = received_json_data['timestamps']
-        dt = datetime.fromtimestamp(ts)
+        dt = make_aware(datetime.fromtimestamp(ts))
         user_id = received_json_data['user_id']
         index = received_json_data['id']
         if 'accel' in received_json_data:
@@ -116,11 +119,10 @@ def data(request):
                     except Exception as e:
                         print("err while adding recent 5 sec data", e)
 
-            # perform inference
+            # perform activity inference
             ndata=np.array(ndata)
-            activities, activities_label = update(ndata)
-            # print(activities_label)
-
+            activities = predict_minute(ndata)
+            
             # save activity inference result
             try:
                 activity = ActivityInferenceRecord.objects.create(
@@ -138,10 +140,21 @@ def data(request):
                         activity_count[activity]+=1
                 custom_user = CustomUser.objects.get(user_id=user_id)
                 custom_user.recent_activities = activity_count
-                custom_user.last_update = datetime.now()
+                custom_user.last_update = make_aware(datetime.now())
                 custom_user.save()
             except Exception as e:
                 print("err while saving activity", e)
+
+            # perform context detection
+            activities_history = []
+            for record in ActivityInferenceRecord.objects.filter(user_id=user_id).order_by('-record_id')[:10]:
+                activities_history = ast.literal_eval(record.activity_inference) + activities_history
+            if len(activities_history)==600:
+                context = predict_context(activities_history)
+                custom_user = CustomUser.objects.get(user_id=user_id)
+                custom_user.current_context = Context.objects.get(context_id = context)
+                custom_user.save()
+
         return HttpResponse(raw_data.count())
             
 
@@ -151,18 +164,27 @@ def data(request):
             f_data = f.read()
         
         for i in range (20):
-            
-            for u_i in range(2):
-                
-                test_json = json.loads(f_data)
+            print(i)
+            for u_i in range(1):
+                np.random.seed(i)
+                test_json = {}
+                test_json['timestamps'] = time.time()
                 test_json['id'] = i
                 test_json['user_id'] = u_i
+                test_json['gyro']={}
+                test_json['gyro']['x'] =  np.random.randn(1500).tolist()
+                test_json['gyro']['y'] =  np.random.randn(1500).tolist()
+                test_json['gyro']['z'] =  np.random.randn(1500).tolist()
                 requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
                 
-                test_json = json.loads(f_data)
+                test_json = {}
+                test_json['timestamps'] = time.time()
                 test_json['id'] = i
                 test_json['user_id'] = u_i
-                test_json['accel'] = test_json.pop('gyro')
+                test_json['accel']={}
+                test_json['accel']['x'] = np.random.randn(1500).tolist()
+                test_json['accel']['y'] = np.random.randn(1500).tolist()
+                test_json['accel']['z'] = np.random.randn(1500).tolist()
                 requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
             
             
