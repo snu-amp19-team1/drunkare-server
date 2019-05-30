@@ -160,9 +160,6 @@ def data(request):
 
     if request.method == "GET":
         
-        with open ('json_sample.json') as f:
-            f_data = f.read()
-        
         for i in range (20):
             print(i)
             for u_i in range(1):
