@@ -58,7 +58,7 @@
             var chart2;
 
             function updateResult() {
-                $.get('/custom_user/fetch', function(data) {
+                $.get('/custom_user/web', function(data) {
                     users = JSON.parse(data['users']);
                     user1 = users[0]['fields'];
                     user2 = users[1]['fields'];
@@ -172,8 +172,6 @@
 		    $("#location1").text(user1['current_location']);
 		    $("#location2").text(user2['current_location']);
 
-                    console.log(user1['current_location'])
-                    console.log(user2['current_location'])
                 });
             }
             /* =============================== */
