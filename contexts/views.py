@@ -8,4 +8,4 @@ def demo(request):
         user1 = CustomUser.objects.all()[0]
         user2 = CustomUser.objects.all()[1]
 
-        return render(request, 'demo.html', {'activity_labels':activity_labels, 'user1':user1, 'user2':user2})
+        return render(request, 'demo.html', {'activity_labels':activity_labels, 'user1':user1, 'user2':user2, 'gps_key': 'AIzaSyDxWAyX0WcgZ47U5sYqmDvrUXb5K17C9KE'})
