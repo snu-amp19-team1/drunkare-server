@@ -8,6 +8,7 @@ class CustomUser(models.Model):
     current_location = models.CharField(max_length=100, blank=True)
     current_context = models.ForeignKey(Context,models.DO_NOTHING, null=True,blank=True,)
     last_update = models.DateTimeField(null=True,blank=True,)
+    is_still = models.IntegerField(default=1,)
 
     class Meta:
         managed = True
