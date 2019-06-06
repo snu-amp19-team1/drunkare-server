@@ -16,9 +16,17 @@
     <body class="uk-height-1-1">
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
             <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
-                <!-- User 1 -->
-		
-                <div id = "map", style = "height: 30%">
+                
+                <div  style = "height: 5%"></div>
+                <div id = "map", style = "height: 50%; width: 90%;margin: auto;">
+                </div>
+                <div class="uk-padding-small uk-background-muted">
+                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
+                    <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
+                </div>
+                <div class="uk-padding-small uk-light uk-background-primary">
+                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
+                    <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
                 </div>
                 <script>
                     // Initialize and add the map
@@ -70,26 +78,24 @@
                 <script async defer
                     src="https://maps.googleapis.com/maps/api/js?key={{gps_key}}&callback=initMap">
                 </script>
-                <div class="uk-margin-top uk-background-muted" style="height: 50%">
+                
+            </div>
+            <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
+                
+                <!-- User 1 -->
+                
+                <div class="uk-margin-top uk-background-muted" style="height: 45%">
+                  <div  style="height: 5%"> {{user1.user_name}}'s recent activities </div>
                   <canvas id="user1"></canvas>
                 </div>  
-                <div class="uk-padding-small uk-background-muted">
-                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
-                </div>
-            </div>
-            <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
+                
                 <!-- User 2 -->
-		<div class="uk-margin-top uk-background-primary uk-light", style="height:30%">
-        
-                </div>
-                <div class="uk-margin-top uk-background-primary" style="height: 50%">
+                
+                <div class="uk-margin-top uk-background-primary" style="height: 45%">
+                  <div  style="height: 5%"> {{user2.user_name}}'s recent activities </div>
                   <canvas id="user2"></canvas>
                 </div>
-                <div class="uk-padding-small uk-light uk-background-primary">
-                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
-                </div>
+                
             </div>
         </div>
         <script>
