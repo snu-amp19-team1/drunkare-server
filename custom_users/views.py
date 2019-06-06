@@ -37,4 +37,5 @@ def app(request):
     activity_dict = dict(zip(activity_labels, activity_probs))
     top3 = sorted(activity_dict.items() ,  key=lambda x: -x[1])[:3]
     time = (custom_user.last_update+timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S")
-    return JsonResponse({'context':context, 'top3':top3, 'time':time})
+    loc = custom_user.current_location
+    return JsonResponse({'context':context, 'top3':top3, 'time':time, 'loc':loc})
