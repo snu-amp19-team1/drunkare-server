@@ -226,8 +226,15 @@ def gps(request):
         test_json = {
             "user_id": 1,
             "timestamp": time.time(),
-            "latitude": 37.4599, 
-            "longitude": 126.9519
+            "latitude": 37.450057, 
+            "longitude": 126.952549
+            }
+        requests.post('http://lynx.snu.ac.kr:8081/data/gps',json.dumps(test_json))
+        test_json = {
+            "user_id": 0,
+            "timestamp": time.time(),
+            "latitude": 37.448600,  
+            "longitude": 126.952570
             }
         requests.post('http://lynx.snu.ac.kr:8081/data/gps',json.dumps(test_json))
     return HttpResponse(0)
