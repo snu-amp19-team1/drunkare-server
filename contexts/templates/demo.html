@@ -17,27 +17,77 @@
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
             <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
                 <!-- User 1 -->
-		<div class="uk-margin-top uk-background-muted">
-                  <h1><span uk-icon="icon: location; ratio: 3"></span><span class="uk-heading-small" style="font-weight:bold" id="location1"></span></h1>
+		
+                <div id = "map", style = "height: 30%">
                 </div>
-                <div class="uk-margin-top uk-background-muted" style="height: 60%">
+                <script>
+                    // Initialize and add the map
+                    function initMap() {
+                        
+                        var user1_loc = "{{user1.current_location}}";
+                        var user2_loc = "{{user2.current_location}}";
+                        if (user1_loc!=""){
+                            user1_loc = {lat: parseFloat(user1_loc.split(",")[0]),lng:parseFloat( user1_loc.split(",")[1])};
+                            console.log(user1_loc)
+                            
+                            if (user2_loc!=""){
+                                user2_loc = {lat: parseFloat(user2_loc.split(",")[0]),lng:parseFloat( user2_loc.split(",")[1])};
+                                console.log(user2_loc)
+                                var map = new google.maps.Map(
+                                    document.getElementById('map'), {zoom: 16, center:user1_loc});
+                        
+                                
+                                var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
+                                var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
+                            }
+                            else{
+                                var map = new google.maps.Map(
+                                    document.getElementById('map'), {zoom: 17, center:user1_loc});
+
+                                var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
+                                
+                            }
+                        }
+                        else{
+                            if (user2_loc!=""){
+                                user2_loc = {lat: parseFloat(user2_loc.split(",")[0]),lng:parseFloat( user2_loc.split(",")[1])};
+                                console.log(user2_loc)
+                                var map = new google.maps.Map(
+                                    document.getElementById('map'), {zoom: 17, center:user2_loc});
+                            
+                                var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
+                            }
+                        }
+                        
+                    
+                    }
+                </script>
+                <!--Load the API from the specified URL
+                * The async attribute allows the browser to render the page while the API loads
+                * The key parameter will contain your own API key (which is not needed for this tutorial)
+                * The callback parameter executes the initMap() function
+                -->
+                <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key={{gps_key}}&callback=initMap">
+                </script>
+                <div class="uk-margin-top uk-background-muted" style="height: 50%">
                   <canvas id="user1"></canvas>
                 </div>  
                 <div class="uk-padding-small uk-background-muted">
-                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in the<br>"<span id="context1"></span>" context</span></h1>
+                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
             <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
                 <!-- User 2 -->
-		<div class="uk-margin-top uk-background-primary uk-light">
-                  <h1><span uk-icon="icon: location; ratio: 3"></span><span class="uk-heading-small uk-text-primary" style="font-weight:bold" id="location2"></span></h1>
+		<div class="uk-margin-top uk-background-primary uk-light", style="height:30%">
+        
                 </div>
-                <div class="uk-margin-top uk-background-primary" style="height: 60%">
+                <div class="uk-margin-top uk-background-primary" style="height: 50%">
                   <canvas id="user2"></canvas>
                 </div>
                 <div class="uk-padding-small uk-light uk-background-primary">
-                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in the<br>"<span id="context2"></span>" context</span></h1>
+                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
                     <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
                 </div>
             </div>
