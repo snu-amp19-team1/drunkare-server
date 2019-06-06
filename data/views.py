@@ -7,6 +7,7 @@ from contexts.predictor import predict_minute,predict_context
 from .models import RawDataRecord, FeatureRecord, ActivityInferenceRecord
 from contexts.models import Context
 from custom_users.models import CustomUser
+from math import sqrt, cos
 import requests
 import json
 import ast
@@ -184,9 +185,49 @@ def data(request):
                 test_json['accel']['z'] = np.random.randn(1500).tolist()
                 requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
             
-            
+
             time.sleep(10)
             
             
         
         return HttpResponse(0)
+
+@csrf_exempt
+def gps(request):
+    if request.method == "POST":
+        received_json_data = json.loads(request.body.decode("utf-8"))
+        ts = received_json_data['timestamp']
+        dt = make_aware(datetime.fromtimestamp(ts))
+        user_id = received_json_data['user_id']
+        latitude = received_json_data['latitude']
+        longitude = received_json_data['longitude']
+        
+        custom_user = CustomUser.objects.get(user_id=user_id)
+        try:
+            last_lat, last_long = custom_user.current_location.split(',')
+            last_lat = float(last_lat)
+            last_long = float(last_long)
+            R = 6371  # radius of the earth in km
+            x = (longitude - last_long) * cos( 0.5*(latitude + last_lat) )
+            y = latitude - last_lat
+            d = R * sqrt( x*x + y*y )
+            if d >= 3:
+                custom_user.is_still = 0
+            else:
+                custom_user.is_still = 1
+            
+        except Exception as e:
+            print(e)
+        custom_user.current_location = str(latitude)+','+str(longitude)
+        custom_user.last_update = dt
+        custom_user.save()
+
+    if request.method == "GET":
+        test_json = {
+            "user_id": 1,
+            "timestamp": time.time(),
+            "latitude": 37.4599, 
+            "longitude": 126.9519
+            }
+        requests.post('http://lynx.snu.ac.kr:8081/data/gps',json.dumps(test_json))
+    return HttpResponse(0)
