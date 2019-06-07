@@ -4,12 +4,12 @@ activities = [
     'touching face', 
     'jotting',
     'clinking',
-    'drinking (glass w/o handle)',
+    'drinking(w/o handle)',
     'pulling out tissue',
-    'drinking (glass w/ handle)',
-    'eating with a spoon',
-    'eating with chopsticks',
-    'eating with a fork',
+    'drinking(w/ handle)',
+    'eating w/ spoon',
+    'eating w/ chopsticks',
+    'eating w/ fork',
     'stirring',
     ]
 
