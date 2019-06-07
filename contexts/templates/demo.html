@@ -16,9 +16,7 @@
     <body class="uk-height-1-1">
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
             <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
-                <div style = "height: 5%"></div>
-                  <div id = "map", style = "height: 50%; width: 90%;margin: auto;">
-                </div>
+                <div id="map" class="uk-padding-small uk-height-1-1"></div>
                 <script>
                     // Initialize and add the map
                     function initMap() {
@@ -71,21 +69,21 @@
 
             <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
                 <!-- User 1 -->
-                <div class="uk-padding-small uk-background-muted" style="height: 45%">
-                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
+                <div class="uk-padding-small uk-light" style="height: 45%">
+                    <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
 		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
-		    <div style="height: 3%"> {{user1.user_name}}'s recent activities </div>
-		    <div class="uk-margin-top uk-bacgrkound-muted" style="height: 80%">
+		    <div> {{user1.user_name}}'s recent activities </div>
+		    <div class="uk-bacgrkound-primary" style="height: 70%">
                       <canvas id="user1"></canvas>
 		    </div>
                 </div>
 
                 <!-- User 2 -->
-                <div class="uk-padding-small uk-light uk-background-primary" style="height: 45%">
+                <div class="uk-padding-small uk-light" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
 		    <!-- <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5> -->
-		    <div style="height: 3%"> {{user2.user_name}}'s recent activities </div>
-		    <div class="uk-margin-top uk-bacgrkound-primary" style="height: 80%">
+		    <div> {{user2.user_name}}'s recent activities </div>
+		    <div class="uk-bacgrkound-primary" style="height: 70%">
                       <canvas id="user2"></canvas>
 		    </div>
                 </div>
@@ -205,7 +203,7 @@
                     }
                     else{
                         $("#context1").css('font-weight','');
-                        $("#context1").css('color','#1E87F0');
+                        $("#context1").css('color','white');
                     }
                     if (user2['current_context'] == "drinking"){
                         $("#context2").css('font-weight','Bold');
