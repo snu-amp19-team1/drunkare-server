@@ -2,9 +2,6 @@ from contexts.models import Activity
 Activity.objects.all().delete()
 activities = [
     'touching face', 
-    'pouring',
-    'raising hand',
-    'using smartphone',
     'jotting',
     'clinking',
     'drinking (glass w/o handle)',
@@ -12,11 +9,8 @@ activities = [
     'drinking (glass w/ handle)',
     'eating with a spoon',
     'eating with chopsticks',
-    'taking photo',
     'eating with a fork',
     'stirring',
-    'using a keyboard',
-    'using a mouse',
     ]
 
 for i,activity in enumerate(activities):
