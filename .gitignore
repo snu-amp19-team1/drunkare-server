@@ -4,3 +4,4 @@ db.sqlite3
 *migrations*
 *pycache*
 .vscode
+gps_key.txt
