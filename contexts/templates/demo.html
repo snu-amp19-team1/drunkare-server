@@ -69,25 +69,25 @@
                 </script>
             </div>
 
-            <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
+            <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
                 <!-- User 1 -->
-                <div class="uk-padding-small uk-background-muted">
+                <div class="uk-padding-small uk-background-muted" style="height: 45%">
                     <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
-                </div>
-                <div class="uk-margin-top uk-background-muted" style="height: 45%">
-                  <div style="height: 5%"> {{user1.user_name}}'s recent activities </div>
-                  <canvas id="user1"></canvas>
+		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
+		    <div style="height: 3%"> {{user1.user_name}}'s recent activities </div>
+		    <div class="uk-margin-top uk-bacgrkound-muted" style="height: 80%">
+                      <canvas id="user1"></canvas>
+		    </div>
                 </div>
 
                 <!-- User 2 -->
-                <div class="uk-padding-small uk-light uk-background-primary">
+                <div class="uk-padding-small uk-light uk-background-primary" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
-                </div>
-                <div class="uk-margin-top uk-background-primary" style="height: 45%">
-                  <div style="height: 5%"> {{user2.user_name}}'s recent activities </div>
-                  <canvas id="user2"></canvas>
+		    <!-- <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5> -->
+		    <div style="height: 3%"> {{user2.user_name}}'s recent activities </div>
+		    <div class="uk-margin-top uk-bacgrkound-primary" style="height: 80%">
+                      <canvas id="user2"></canvas>
+		    </div>
                 </div>
             </div>
         </div>
