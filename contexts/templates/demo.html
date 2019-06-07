@@ -15,7 +15,7 @@
     </head>
     <body class="uk-height-1-1">
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
-            <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
+            <div class="uk-width-1-3 uk-background-muted uk-height-1-1">
                 <div id="map" class="uk-padding-small uk-height-1-1"></div>
                 <script>
                     // Initialize and add the map
@@ -67,13 +67,13 @@
                 </script>
             </div>
 
-            <div class="uk-width-1-2 uk-background-primary uk-height-1-1">
+            <div class="uk-width-2-3 uk-background-primary uk-height-1-1">
                 <!-- User 1 -->
-                <div class="uk-padding-small uk-light" style="height: 45%">
+                <div class="uk-padding-small uk-background-muted" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
 		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
 		    <div> {{user1.user_name}}'s recent activities </div>
-		    <div class="uk-bacgrkound-primary" style="height: 70%">
+		    <div class="uk-bacgrkound-muted" style="height: 70%">
                       <canvas id="user1"></canvas>
 		    </div>
                 </div>
@@ -164,6 +164,13 @@
                                     ticks:{
                                         max: 600
                                     }}
+                                ],
+                                xAxes:[{
+                                    ticks:{
+					autoSkip: false,
+                                        maxRotation: 90,
+					minRotation: 0
+                                    }}
                                 ]
                             }
                         }
@@ -184,7 +191,16 @@
                             scales:{
                                 yAxes:[{
                                     ticks:{
-                                        max: 600
+                                        max: 600,
+					fontColor: "#FFFFFF"
+                                    }}
+                                ],
+                                xAxes:[{
+                                    ticks:{
+					autoSkip: false,
+                                        maxRotation: 90,
+					minRotation: 0,
+					fontColor: "#FFFFFF"
                                     }}
                                 ]
                             }
@@ -203,7 +219,7 @@
                     }
                     else{
                         $("#context1").css('font-weight','');
-                        $("#context1").css('color','white');
+                        $("#context1").css('color','#1E87F0');
                     }
                     if (user2['current_context'] == "drinking"){
                         $("#context2").css('font-weight','Bold');
