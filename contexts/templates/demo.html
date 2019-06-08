@@ -15,36 +15,25 @@
     </head>
     <body class="uk-height-1-1">
         <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center uk-height-1-1" uk-grid>
-            <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
-                
-                <div  style = "height: 5%"></div>
-                <div id = "map", style = "height: 50%; width: 90%;margin: auto;">
-                </div>
-                <div class="uk-padding-small uk-background-muted">
-                    <h1><span class="uk-heading-medium uk-text-primary">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5>
-                </div>
-                <div class="uk-padding-small uk-light uk-background-primary">
-                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-                    <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5>
-                </div>
+            <div class="uk-width-1-3 uk-background-muted uk-height-1-1">
+                <div id="map" class="uk-padding-small uk-height-1-1"></div>
                 <script>
                     // Initialize and add the map
                     function initMap() {
-                        
+
                         var user1_loc = "{{user1.current_location}}";
                         var user2_loc = "{{user2.current_location}}";
                         if (user1_loc!=""){
                             user1_loc = {lat: parseFloat(user1_loc.split(",")[0]),lng:parseFloat( user1_loc.split(",")[1])};
                             console.log(user1_loc)
-                            
+
                             if (user2_loc!=""){
                                 user2_loc = {lat: parseFloat(user2_loc.split(",")[0]),lng:parseFloat( user2_loc.split(",")[1])};
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 16, center:user1_loc});
-                        
-                                
+
+
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
@@ -53,7 +42,7 @@
                                     document.getElementById('map'), {zoom: 17, center:user1_loc});
 
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
-                                
+
                             }
                         }
                         else{
@@ -62,12 +51,10 @@
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 17, center:user2_loc});
-                            
+
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
                         }
-                        
-                    
                     }
                 </script>
                 <!--Load the API from the specified URL
@@ -78,24 +65,28 @@
                 <script async defer
                     src="https://maps.googleapis.com/maps/api/js?key={{gps_key}}&callback=initMap">
                 </script>
-                
             </div>
-            <div class="uk-width-1-2 uk-background-muted uk-height-1-1">
-                
+
+            <div class="uk-width-2-3 uk-background-primary uk-height-1-1">
                 <!-- User 1 -->
-                
-                <div class="uk-margin-top uk-background-muted" style="height: 45%">
-                  <div  style="height: 5%"> {{user1.user_name}}'s recent activities </div>
-                  <canvas id="user1"></canvas>
-                </div>  
-                
-                <!-- User 2 -->
-                
-                <div class="uk-margin-top uk-background-primary" style="height: 45%">
-                  <div  style="height: 5%"> {{user2.user_name}}'s recent activities </div>
-                  <canvas id="user2"></canvas>
+                <div class="uk-padding-small uk-background-muted" style="height: 45%">
+                    <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
+		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
+		    <div> {{user1.user_name}}'s recent activities </div>
+		    <div class="uk-bacgrkound-muted" style="height: 70%">
+                      <canvas id="user1"></canvas>
+		    </div>
                 </div>
-                
+
+                <!-- User 2 -->
+                <div class="uk-padding-small uk-light" style="height: 45%">
+                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
+		    <!-- <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5> -->
+		    <div> {{user2.user_name}}'s recent activities </div>
+		    <div class="uk-bacgrkound-primary" style="height: 70%">
+                      <canvas id="user2"></canvas>
+		    </div>
+                </div>
             </div>
         </div>
         <script>
@@ -105,7 +96,7 @@
             /* =============================== */
 
 
-            
+
             /* ======= update chart ======= */
             setInterval(updateResult, 10000); // update period
 
@@ -173,6 +164,13 @@
                                     ticks:{
                                         max: 600
                                     }}
+                                ],
+                                xAxes:[{
+                                    ticks:{
+					autoSkip: false,
+                                        maxRotation: 90,
+					minRotation: 0
+                                    }}
                                 ]
                             }
                         }
@@ -193,7 +191,16 @@
                             scales:{
                                 yAxes:[{
                                     ticks:{
-                                        max: 600
+                                        max: 600,
+					fontColor: "#FFFFFF"
+                                    }}
+                                ],
+                                xAxes:[{
+                                    ticks:{
+					autoSkip: false,
+                                        maxRotation: 90,
+					minRotation: 0,
+					fontColor: "#FFFFFF"
                                     }}
                                 ]
                             }
@@ -205,7 +212,7 @@
                     $("#time1").text(String(time1).substring(0,time1.length-17) + " Updated");
                     time2=new Date(user2['last_update']).toString();
                     $("#time2").text(String(time2).substring(0,time2.length-17) + " Updated");
-                    
+
                     if (user1['current_context'] == "drinking"){
                         $("#context1").css('font-weight','Bold');
                         $("#context1").css('color','red');
@@ -222,8 +229,8 @@
                         $("#context2").css('font-weight','');
                         $("#context2").css('color','white');
                     }
-                    $("#context1").text(user1['current_context']); 
-                    $("#context2").text(user2['current_context']); 
+                    $("#context1").text(user1['current_context']);
+                    $("#context2").text(user2['current_context']);
 
 		    $("#location1").text(user1['current_location']);
 		    $("#location2").text(user2['current_location']);
@@ -231,7 +238,7 @@
                 });
             }
             /* =============================== */
-            
+
 
         </script>
     </body>
