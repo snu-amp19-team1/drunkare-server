@@ -106,7 +106,7 @@
                     user_data1 = {
                         labels: activity_labels,
                         datasets: [{
-                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                            backgroundColor: ["#ff6384", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#ff6384", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                                             "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
                             borderColor: 'transparent',
                             data: updated_chart_data1
@@ -116,7 +116,7 @@
                     user_data2 = {
                         labels: activity_labels,
                         datasets: [{
-                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
+                            backgroundColor: ["#ff6384", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#ff6384", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
                                             "#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#36a2eb","#ff6384"],
                             borderColor: 'transparent',
                             data: updated_chart_data2
@@ -147,6 +147,8 @@
                             display: false
                             },
                             tooltips: {
+			    titleFontSize: 30,
+			    titleFontFamily: 'Karla',
                             bodyFontSize: 30,
                             bodyFontFamily: 'Karla'
                             },
@@ -155,14 +157,18 @@
                             scales:{
                                 yAxes:[{
                                     ticks:{
-                                        max: 600
+                                        max: 600,
+					fontSize: 20,
+					fontFamily: 'Karla'
                                     }}
                                 ],
                                 xAxes:[{
                                     ticks:{
 					autoSkip: false,
                                         maxRotation: 90,
-					minRotation: 0
+					minRotation: 0,
+					fontSize: 10,
+					fontFamily: 'Karla'
                                     }}
                                 ]
                             }
@@ -176,6 +182,8 @@
                             display: false
                             },
                             tooltips: {
+			    titleFontSize: 30,
+			    titleFontFamily: 'Karla',
                             bodyFontSize: 30,
                             bodyFontFamily: 'Karla'
                             },
@@ -185,7 +193,9 @@
                                 yAxes:[{
                                     ticks:{
                                         max: 600,
-					fontColor: "#FFFFFF"
+					fontColor: "#FFFFFF",
+					fontSize: 20,
+					fontFamily: 'Karla'
                                     }}
                                 ],
                                 xAxes:[{
@@ -193,7 +203,9 @@
 					autoSkip: false,
                                         maxRotation: 90,
 					minRotation: 0,
-					fontColor: "#FFFFFF"
+					fontColor: "#FFFFFF",
+					fontSize: 10,
+					fontFamily: 'Karla'
                                     }}
                                 ]
                             }
