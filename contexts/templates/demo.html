@@ -66,8 +66,7 @@
                 <!-- User 1 -->
                 <div class="uk-padding-small uk-background-muted" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
-		    <div> {{user1.user_name}}'s recent activities </div>
+		    <div> {{user1.user_name}}'s recent activities ( <span id="time1"></span> )</div>
 		    <div class="uk-bacgrkound-muted" style="height: 70%">
                       <canvas id="user1"></canvas>
 		    </div>
@@ -76,8 +75,7 @@
                 <!-- User 2 -->
                 <div class="uk-padding-small uk-light" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-		    <!-- <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5> -->
-		    <div> {{user2.user_name}}'s recent activities </div>
+		    <div> {{user2.user_name}}'s recent activities ( <span id="time2"></span> )</div>
 		    <div class="uk-bacgrkound-primary" style="height: 70%">
                       <canvas id="user2"></canvas>
 		    </div>
