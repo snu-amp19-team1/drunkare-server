@@ -17,10 +17,10 @@ module_dir = os.path.dirname(__file__)
 # DL models
 # ????
 
-def predict_minute(data=None, batch = 55, model_name='RF'):
+def predict_minute(data=None, batch = 55, model_name='ETC'):
     
     test_set=[]
-    for(x,window) in slide_window(data,1,6): 
+    for _,window in slide_window(data,1,6): 
         wind=window.reshape(180)
         test_set.append(wind)
     # print(len(test_set))
