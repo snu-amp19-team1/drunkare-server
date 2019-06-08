@@ -20,7 +20,6 @@
                 <script>
                     // Initialize and add the map
                     function initMap() {
-
                         var user1_loc = "{{user1.current_location}}";
                         var user2_loc = "{{user2.current_location}}";
                         if (user1_loc!=""){
@@ -32,15 +31,12 @@
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 16, center:user1_loc});
-
-
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
                             else{
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 17, center:user1_loc});
-
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
 
                             }
@@ -51,7 +47,6 @@
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 17, center:user2_loc});
-
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
                         }
@@ -71,8 +66,7 @@
                 <!-- User 1 -->
                 <div class="uk-padding-small uk-background-muted" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-		    <!-- <h5 class="uk-heading-line"><span id="time1" class="uk-text-primary">- Updated</span></h5> -->
-		    <div> {{user1.user_name}}'s recent activities </div>
+		    <div> {{user1.user_name}}'s recent activities ( <span id="time1"></span> )</div>
 		    <div class="uk-bacgrkound-muted" style="height: 70%">
                       <canvas id="user1"></canvas>
 		    </div>
@@ -81,8 +75,7 @@
                 <!-- User 2 -->
                 <div class="uk-padding-small uk-light" style="height: 45%">
                     <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-		    <!-- <h5 class="uk-heading-line"><span id="time2" class="uk-text-primary">- Updated</span></h5> -->
-		    <div> {{user2.user_name}}'s recent activities </div>
+		    <div> {{user2.user_name}}'s recent activities ( <span id="time2"></span> )</div>
 		    <div class="uk-bacgrkound-primary" style="height: 70%">
                       <canvas id="user2"></canvas>
 		    </div>
