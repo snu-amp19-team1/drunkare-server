@@ -103,7 +103,7 @@
                     user1 = users[0]['fields'];
                     user2 = users[1]['fields'];
                     updated_chart_data1 = JSON.parse(user1['recent_activities']).slice(0,10);
-                    console.log(Math.max(...updated_chart_data1));
+                    
                     
                     user_data1 = {
                         labels: activity_labels,
@@ -115,7 +115,7 @@
                         }]
                     }
                     updated_chart_data2 = JSON.parse(user2['recent_activities']).slice(0,10);
-                    console.log(Math.max(...updated_chart_data2));
+                    
                     user_data2 = {
                         labels: activity_labels,
                         datasets: [{
@@ -140,7 +140,7 @@
                     if (chart2){
                         chart2.destroy();
                     }
-
+                    
                     // rerender chart
                     chart1 = new Chart(ctx1, {
                                         type: 'bar',
@@ -150,6 +150,13 @@
                                             display: false
                                             },
                                             tooltips: {
+                                                mode: 'index',
+                                                intersect: true,
+                                                callbacks: {
+                                                    label: function(items,data){
+                                                        return "";
+                                                    }
+                                                    },
                                 titleFontSize: 30,
                                 titleFontFamily: 'Karla',
                                             bodyFontSize: 30,
@@ -185,6 +192,9 @@
                                                 display: false
                                                 },
                                                 tooltips: {
+                                                    label: function(items,data){
+                                                        return "";
+                                                    },
                                     titleFontSize: 30,
                                     titleFontFamily: 'Karla',
                                                 bodyFontSize: 30,
