@@ -104,21 +104,21 @@ def data(request):
                     print("err while saving feature", e)
                 ndata.append(feature_record.feature)
             
-            # if previous raw data exists, add the last 5 seconds data at the front
+            # if previous raw data exists, add the last 3 seconds data at the front
             prev_raw_data = RawDataRecord.objects.filter(user_id=user_id,index=index-1)
             if prev_raw_data.count() == 2:
 
                 prev_accel = prev_raw_data.get(data_type=0)
                
-                # if previous feature data exists, add the last 5 seconds data at the front
+                # if previous feature data exists, add the last 3 seconds data at the front
                 prev_feature_data = FeatureRecord.objects.filter(user_id=user_id, raw_data=prev_accel)
                 if prev_feature_data.count() == 60:
                     try:
-                        last_5_features = prev_feature_data.filter(index__gte=55).order_by('index')
-                        ndata = [ast.literal_eval(feature.feature) for feature in last_5_features] + ndata
+                        last_3_features = prev_feature_data.filter(index__gte=57).order_by('index')
+                        ndata = [ast.literal_eval(feature.feature) for feature in last_3_features] + ndata
 
                     except Exception as e:
-                        print("err while adding recent 5 sec data", e)
+                        print("err while adding recent 3 sec data", e)
 
             # perform activity inference
             ndata=np.array(ndata)
@@ -150,17 +150,30 @@ def data(request):
             activities_history = []
             for record in ActivityInferenceRecord.objects.filter(user_id=user_id).order_by('-record_id')[:10]:
                 activities_history = ast.literal_eval(record.activity_inference) + activities_history
-            if len(activities_history)==600:
-                context = predict_context(activities_history)
-                custom_user = CustomUser.objects.get(user_id=user_id)
-                custom_user.current_context = Context.objects.get(context_id = context)
-                custom_user.save()
+            
+            if len(activities_history) in [199,200]:
+                try:
+                    context = predict_context(activities_history)
+                    custom_user = CustomUser.objects.get(user_id=user_id)
+                    custom_user.current_context = Context.objects.get(context_id = context)
+                    custom_user.save()
+                    print("predicted")
+                    
+                except:
+                    print("error while updating context")
 
         return HttpResponse(raw_data.count())
             
 
     if request.method == "GET":
-        
+        # user_id = 0
+        # activities_history = []
+        # for record in ActivityInferenceRecord.objects.filter(user_id=user_id).order_by('-record_id')[:10]:
+        #     activities_history = ast.literal_eval(record.activity_inference) + activities_history
+    
+        # if len(activities_history)==200:
+        #     context = predict_context(activities_history)
+        #     return HttpResponse(context)
         for i in range (20):
             print(i)
             for u_i in range(1):
@@ -186,7 +199,7 @@ def data(request):
                 requests.post('http://lynx.snu.ac.kr:8081/data/',json.dumps(test_json))
             
 
-            time.sleep(10)
+            time.sleep(3)
             
             
         
