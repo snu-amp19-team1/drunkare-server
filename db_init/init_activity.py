@@ -1,15 +1,15 @@
 from contexts.models import Activity
 Activity.objects.all().delete()
 activities = [
-    'touching face', 
+    'touching\nface', 
     'jotting',
     'clinking',
-    'drinking(w/o handle)',
-    'pulling out tissue',
-    'drinking(w/ handle)',
-    'eating w/ spoon',
-    'eating w/ chopsticks',
-    'eating w/ fork',
+    'drinking\n(w/o handle)',
+    'pulling out\ntissue',
+    'drinking\n(w/ handle)',
+    'eating\n(w/ spoon)',
+    'eating\n(w/ chopsticks)',
+    'eating\n(w/ fork)',
     'stirring',
     'idle',
     ]
