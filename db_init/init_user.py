@@ -8,8 +8,8 @@ users = [
 ]
 
 recent_activities = [
-    '[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]',
-    '[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]',
+    '[1,1,1,1,1,1,1,1,1,1,1]',
+    '[1,1,1,1,1,1,1,1,1,1,1]',
 ]
 
 contexts=[
@@ -29,5 +29,5 @@ for i,user in enumerate(users):
 CustomUser.objects.create(
     user_name="test",
     user_id = 2,
-    recent_activities='[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]',
+    recent_activities='[1,1,1,1,1,1,1,1,1,1,1]',
     )
