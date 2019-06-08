@@ -20,7 +20,6 @@
                 <script>
                     // Initialize and add the map
                     function initMap() {
-
                         var user1_loc = "{{user1.current_location}}";
                         var user2_loc = "{{user2.current_location}}";
                         if (user1_loc!=""){
@@ -32,15 +31,12 @@
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 16, center:user1_loc});
-
-
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
                             else{
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 17, center:user1_loc});
-
                                 var marker = new google.maps.Marker({position: user1_loc, map: map, label:"{{user1.user_name}}"});
 
                             }
@@ -51,7 +47,6 @@
                                 console.log(user2_loc)
                                 var map = new google.maps.Map(
                                     document.getElementById('map'), {zoom: 17, center:user2_loc});
-
                                 var marker2 = new google.maps.Marker({position: user2_loc, map: map, label:"{{user2.user_name}}"});
                             }
                         }
