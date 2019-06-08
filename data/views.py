@@ -135,7 +135,7 @@ def data(request):
                     user_id=user_id,
                     index__gte=index-9,
                 )
-                activity_count = [0]*16
+                activity_count = [0]*11
                 for activity_record in recent_activity_record:
                     for activity in ast.literal_eval(activity_record.activity_inference):
                         activity_count[activity]+=1
@@ -166,14 +166,14 @@ def data(request):
             
 
     if request.method == "GET":
-        # user_id = 0
-        # activities_history = []
-        # for record in ActivityInferenceRecord.objects.filter(user_id=user_id).order_by('-record_id')[:10]:
-        #     activities_history = ast.literal_eval(record.activity_inference) + activities_history
+        user_id = 1
+        activities_history = []
+        for record in ActivityInferenceRecord.objects.filter(user_id=user_id).order_by('-record_id')[:10]:
+            activities_history = ast.literal_eval(record.activity_inference) + activities_history
     
-        # if len(activities_history)==200:
-        #     context = predict_context(activities_history)
-        #     return HttpResponse(context)
+        if len(activities_history)==200:
+            context = predict_context(activities_history)
+            return HttpResponse(context)
         for i in range (20):
             print(i)
             for u_i in range(1):

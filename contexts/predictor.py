@@ -69,9 +69,12 @@ def predict_context(data=None, model_name='rf'):
     context_input = []
     for minute in data:
         
-        activity_count=np.zeros(17)
+        activity_count=np.zeros(11)
         for activity in minute:
-            activity_count[activity]+=1
+            try:
+                activity_count[activity]+=1
+            except:
+                print("activity label out of range")
         context_input.append(activity_count)
     
     context_input = np.array(context_input)
