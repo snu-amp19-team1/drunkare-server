@@ -4,7 +4,7 @@ from .models import Activity
 from custom_users.models import CustomUser
 
 def demo(request):
-        activity_labels = [activity.activity_label for activity in Activity.objects.all()]
+        activity_labels = [activity.activity_label for activity in Activity.objects.all()][:-1]
         user1 = CustomUser.objects.all()[0]
         user2 = CustomUser.objects.all()[1]
         gps_key=""
