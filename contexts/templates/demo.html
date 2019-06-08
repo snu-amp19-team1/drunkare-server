@@ -65,8 +65,8 @@
             <div class="uk-width-2-3 uk-background-primary uk-height-1-1">
                 <!-- User 1 -->
                 <div class="uk-padding-small uk-background-muted" style="height: 45%">
-                    <h1><span class="uk-heading-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
-		    <div> {{user1.user_name}}'s recent activities ( <span id="time1"></span> )</div>
+                    <h1><span class="responsive-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
+		    <div><span class="responsive-small">{{user1.user_name}}'s recent activities ( <span id="time1"></span> )</span></div>
 		    <div class="uk-bacgrkound-muted" style="height: 70%">
                       <canvas id="user1"></canvas>
 		    </div>
@@ -74,8 +74,8 @@
 
                 <!-- User 2 -->
                 <div class="uk-padding-small uk-light" style="height: 45%">
-                    <h1><span class="uk-heading-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
-		    <div> {{user2.user_name}}'s recent activities ( <span id="time2"></span> )</div>
+                    <h1><span class="responsive-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
+		    <div><span class="responsive-small">{{user2.user_name}}'s recent activities ( <span id="time2"></span> )</span></div>
 		    <div class="uk-bacgrkound-primary" style="height: 70%">
                       <canvas id="user2"></canvas>
 		    </div>
@@ -175,7 +175,15 @@
                                                     }}
                                                 ]
                                             }
-                                        }
+                                        },
+			        plugins: [{
+           			    /* Adjust axis labelling font size according to chart size */
+           			    beforeDraw: function(c) {
+               			    var chartHeight = c.chart.height;
+               			    var size = chartHeight / 13;
+               			    c.scales['y-axis-0'].options.ticks.minor.fontSize = size;
+           			    }
+      	  			}]
                                     });
                     chart2 = new Chart(ctx2, {
                                             type: 'bar',
@@ -212,7 +220,15 @@
                                                         }}
                                                     ]
                                                 }
-                                            }
+                                            },
+			        plugins: [{
+           			    /* Adjust axis labelling font size according to chart size */
+           			    beforeDraw: function(c) {
+               			    var chartHeight = c.chart.height;
+               			    var size = chartHeight / 13;
+               			    c.scales['y-axis-0'].options.ticks.minor.fontSize = size;
+           			    }
+      	  			}]
                                         });
 
                     //update strings

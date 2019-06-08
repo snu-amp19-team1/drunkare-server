@@ -232,6 +232,14 @@ figure {
 }
 /* Headings
  ========================================================================== */
+.responsive-small {
+    font-size: calc(0.5rem + 0.5vw);
+    line-height: 1.1;
+}
+.responsive-medium {
+    font-size: calc(1rem + 3vw);
+}
+
 h1,
 .uk-h1,
 h2,
@@ -249,7 +257,7 @@ h6,
 .uk-heading-large,
 .uk-heading-xlarge,
 .uk-heading-2xlarge {
-  margin: 0 0 20px 0;
+  margin: 0 0 0.5vw 0;
   font-family: 'Karla', sans-serif;
   font-weight: normal;
   color: #333;
