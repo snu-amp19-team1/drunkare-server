@@ -4,13 +4,14 @@ import numpy as np
 from os import path
 import glob
 
+from sklearn import preprocessing
 from .predictor_util import slide_window
 
 module_dir = os.path.dirname(__file__)
 
 # ML models
 # input: (60,6,5) feature array 
-# slide and reshape to (55,180) 
+# slide and reshape to (55,180)
 # infer 
 # output: 55 list
 
@@ -20,10 +21,9 @@ module_dir = os.path.dirname(__file__)
 def predict_minute(data=None, batch = 55, model_name='ETC'):
     
     test_set=[]
-    for _,window in slide_window(data,1,6): 
+    for _,window in slide_window(data,3,6): 
         wind=window.reshape(180)
         test_set.append(wind)
-    # print(len(test_set))
     
     # load model
     if path.isfile(module_dir+'/pretrained/{}'.format(model_name)):
@@ -46,9 +46,13 @@ def predict_minute(data=None, batch = 55, model_name='ETC'):
             return pred
             
         else:
-            
-            pred = model.predict(test_set).tolist()
-            # print(len(pred))
+            pred=[]
+            pred_probs = model.predict_proba(preprocessing.quantile_transform(test_set, copy=True, n_quantiles=20))
+            for j in pred_probs:
+                if np.max(j)<0.3: #확률 0.3미만이면 idle
+                    pred.append(10)
+                else:
+                    pred.append(np.argmax(j))            
             return pred
         
     else:
@@ -56,11 +60,30 @@ def predict_minute(data=None, batch = 55, model_name='ETC'):
         return None
 
 
-def predict_context(data=None):
-    glob.glob(module_dir+'/rawdata/compdata[1-3].csv')
-    print(len(data))
-    #drink 0, eat 1, cafe 2, desk 3
-    context = 3 # TOFIX
+def predict_context(data=None, model_name='rf'):
+    # print('predicting context') #drink 0, eat 1, cafe 2, desk 3
+    if len(data) == 199:
+        data.append(10)
+    data = np.array(data).reshape(10,20)
+    
+    context_input = []
+    for minute in data:
+        
+        activity_count=np.zeros(17)
+        for activity in minute:
+            activity_count[activity]+=1
+        context_input.append(activity_count)
+    
+    context_input = np.array(context_input)
+    # print(context_input.shape)
+
+    context = 0
+    if path.isfile(module_dir+'/pretrained/complex_{}.sav'.format(model_name)):
+        with open(module_dir+'/pretrained/complex_{}.sav'.format(model_name), 'rb') as f:
+            model = cPickle.load(f)
+            context_input = context_input.reshape(1,-1)
+            context = model.predict(context_input)[0]
+
     return context
 
         
