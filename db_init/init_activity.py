@@ -11,6 +11,7 @@ activities = [
     'eating w/ chopsticks',
     'eating w/ fork',
     'stirring',
+    'idle',
     ]
 
 for i,activity in enumerate(activities):

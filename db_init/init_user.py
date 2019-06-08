@@ -23,6 +23,7 @@ for i,user in enumerate(users):
         user_id = i,
         recent_activities=recent_activities[i],
         current_context=contexts[i],
+        last_update=datetime.now(), 
         )
 
 CustomUser.objects.create(
