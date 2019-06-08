@@ -35,6 +35,7 @@ def app(request):
     activity_probs = ast.literal_eval(custom_user.recent_activities)
     
     activity_dict = dict(zip(activity_labels, activity_probs))
+    del activity_dict['idle']
     top3 = sorted(activity_dict.items() ,  key=lambda x: -x[1])[:3]
     time = (custom_user.last_update+timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S")
     loc = custom_user.current_location
