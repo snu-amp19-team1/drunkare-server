@@ -8,13 +8,13 @@ users = [
 ]
 
 recent_activities = [
-    '[1,1,1,1,1,1,1,1,1,1,1]',
-    '[1,1,1,1,1,1,1,1,1,1,1]',
+    '[0,0,0,0,0,0,0,0,0,0,0]',
+    '[0,0,0,0,0,0,0,0,0,0,0]',
 ]
 
 contexts=[
     Context.objects.get(context_id=3),
-    Context.objects.get(context_id=2),
+    Context.objects.get(context_id=3),
 ]
 
 for i,user in enumerate(users):
@@ -23,11 +23,12 @@ for i,user in enumerate(users):
         user_id = i,
         recent_activities=recent_activities[i],
         current_context=contexts[i],
-        last_update=datetime.now(), 
+        last_update=datetime.now(),
+        current_location='37.448303,126.952505',
         )
 
 CustomUser.objects.create(
     user_name="test",
     user_id = 2,
-    recent_activities='[1,1,1,1,1,1,1,1,1,1,1]',
+    recent_activities='[0,0,0,0,0,0,0,0,0,0,0]',
     )
