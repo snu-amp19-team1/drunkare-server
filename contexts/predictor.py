@@ -57,22 +57,22 @@ def predict_minute(data=None, batch = 55, model_name='ETC'):
 
             pred_probs = model.predict_proba(test_set)
             for j in pred_probs:
-                if np.max(j)<0.2: #확률 0.3미만이면 idle
+                if np.max(j)<0.25:
                     pred.append(10)
                 else:
-                    if np.argmax(j)==8:
-                        #print('label : ',np.argmax(j), 'probability : ',np.max(j))
+                    if np.argmax(j) in [8,0]: # face, fork
+                        
                         if(np.max(j)<0.3):
                             pred.append(10)
                         else:
-                            pred.append(8)
+                            pred.append(np.argmax(j))
                     else:
-                        if np.argmax(j)==0:
-                        #print('label : ',np.argmax(j), 'probability : ',np.max(j))
-                            if(np.max(j)<0.35):
+                        if np.argmax(j)==3: # drinking
+                        
+                            if(np.max(j)<0.3):
                                 pred.append(10)
                             else:
-                                pred.append(0)
+                                pred.append(3)
                         else:
                             pred.append(np.argmax(j))     
             
@@ -90,7 +90,7 @@ def predict_minute(data=None, batch = 55, model_name='ETC'):
         return None
 
 
-def predict_context(data=None, model_name='rf'):
+def predict_context(data=None, model_name='ETC'):
     # print('predicting context') #drink 0, eat 1, cafe 2, desk 3
     if len(data) == 199:
         data.append(10)
