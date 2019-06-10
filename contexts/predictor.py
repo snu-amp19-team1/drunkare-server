@@ -5,7 +5,7 @@ from os import path
 import glob
 
 from sklearn import preprocessing
-from .predictor_util import slide_window
+from .predictor_util import slide_window, stdmean
 
 module_dir = os.path.dirname(__file__)
 
@@ -47,13 +47,43 @@ def predict_minute(data=None, batch = 55, model_name='ETC'):
             
         else:
             pred=[]
-            pred_probs = model.predict_proba(preprocessing.quantile_transform(test_set, copy=True, n_quantiles=20))
+            stdMean = []
+            
+            # for postprocessing
+            for i in test_set:
+                stdMean.append(stdmean(i))
+            stdMean = np.array(stdMean)
+            np.set_printoptions(precision=2)
+
+            pred_probs = model.predict_proba(test_set)
             for j in pred_probs:
-                if np.max(j)<0.3: #확률 0.3미만이면 idle
+                if np.max(j)<0.2: #확률 0.3미만이면 idle
                     pred.append(10)
                 else:
-                    pred.append(np.argmax(j))            
-            return pred
+                    if np.argmax(j)==8:
+                        #print('label : ',np.argmax(j), 'probability : ',np.max(j))
+                        if(np.max(j)<0.3):
+                            pred.append(10)
+                        else:
+                            pred.append(8)
+                    else:
+                        if np.argmax(j)==0:
+                        #print('label : ',np.argmax(j), 'probability : ',np.max(j))
+                            if(np.max(j)<0.35):
+                                pred.append(10)
+                            else:
+                                pred.append(0)
+                        else:
+                            pred.append(np.argmax(j))     
+            
+            # postprocessing
+            pred2 = []
+            for i,p in enumerate(pred):
+                if float(stdMean[i])>=0.5:
+                    pred2.append(pred[i])
+                else:
+                    pred2.append(10)
+            return pred2
         
     else:
         print("model doesn't exist. train the models first.")

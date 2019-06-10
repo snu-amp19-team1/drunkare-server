@@ -21,6 +21,13 @@ from sklearn.preprocessing import OneHotEncoder
 
 module_dir = os.path.dirname(__file__)
 
+def stdmean(window):
+    RMS_window=[]
+    for i in range(0,180,6):
+        RMS_window.append(float(window[i]))
+    RMS_window=np.array(RMS_window)
+    return RMS_window.std(axis=-1)
+
 def load_data(model_name, n_steps=None, n_length=None, n_features=None):
     filename_queue=glob.glob(module_dir+'/rawdata/data[1-5].csv')
     if model_name in ['SVM', 'RF', 'NB', 'KNN']:
