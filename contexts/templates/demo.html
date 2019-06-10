@@ -156,11 +156,11 @@
                                                     label: function(items,data){
                                                         return "";
                                                     }
-                                                    },
-                                titleFontSize: 30,
-                                titleFontFamily: 'Karla',
-                                            bodyFontSize: 30,
-                                            bodyFontFamily: 'Karla'
+                                                },
+                        			titleFontSize: 25,
+                                		titleFontFamily: 'Karla',
+                                            	bodyFontSize: 30,
+                                            	bodyFontFamily: 'Karla'
                                             },
                                             responsive:true,
                                             maintainAspectRatio: false,
@@ -168,29 +168,22 @@
                                                 yAxes:[{
                                                     ticks:{
                                                         max: Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10,
-                                    fontSize: 20,
-                                    fontFamily: 'Karla'
+							stepSize: (Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10)/5,
+                                    			fontSize: 10,
+                                    			fontFamily: 'Karla'
                                                     }}
                                                 ],
                                                 xAxes:[{
                                                     ticks:{
-                                    autoSkip: false,
+                                    			autoSkip: false,
                                                         maxRotation: 90,
-                                    minRotation: 0,
-                                    fontSize: 10,
-                                    fontFamily: 'Karla'
+                                    			minRotation: 0,
+                                    			fontSize: 10,
+                                    			fontFamily: 'Karla'
                                                     }}
                                                 ]
                                             }
-                                        },
-			        plugins: [{
-           			    /* Adjust axis labelling font size according to chart size */
-           			    beforeDraw: function(c) {
-               			    var chartHeight = c.chart.height;
-               			    var size = chartHeight / 13;
-               			    c.scales['y-axis-0'].options.ticks.minor.fontSize = size;
-           			    }
-      	  			}]
+                                        }
                                     });
                     chart2 = new Chart(ctx2, {
                                             type: 'bar',
@@ -200,13 +193,17 @@
                                                 display: false
                                                 },
                                                 tooltips: {
-                                                    label: function(items,data){
+						    mode: 'index',
+						    intersect: true,
+						    callbacks: {
+                                                    	label: function(items,data){
                                                         return "";
+							}
                                                     },
-                                    titleFontSize: 30,
-                                    titleFontFamily: 'Karla',
-                                                bodyFontSize: 30,
-                                                bodyFontFamily: 'Karla'
+                                    		    titleFontSize: 25,
+                                    		    titleFontFamily: 'Karla',
+                                                    bodyFontSize: 30,
+                                                    bodyFontFamily: 'Karla'
                                                 },
                                                 responsive:true,
                                                 maintainAspectRatio: false,
@@ -214,31 +211,24 @@
                                                     yAxes:[{
                                                         ticks:{
                                                             max: Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10,
-                                        fontColor: "#FFFFFF",
-                                        fontSize: 20,
-                                        fontFamily: 'Karla'
+							    stepSize: (Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10)/5,
+                                        		    fontColor: "#FFFFFF",
+                                        		    fontSize: 10,
+                                        		    fontFamily: 'Karla'
                                                         }}
                                                     ],
                                                     xAxes:[{
                                                         ticks:{
-                                        autoSkip: false,
+                                        		    autoSkip: false,
                                                             maxRotation: 90,
-                                        minRotation: 0,
-                                        fontColor: "#FFFFFF",
-                                        fontSize: 10,
-                                        fontFamily: 'Karla'
+                                        		    minRotation: 0,
+                                        		    fontColor: "#FFFFFF",
+                                        		    fontSize: 10,
+                                        		    fontFamily: 'Karla'
                                                         }}
                                                     ]
                                                 }
                                             },
-			        plugins: [{
-           			    /* Adjust axis labelling font size according to chart size */
-           			    beforeDraw: function(c) {
-               			    var chartHeight = c.chart.height;
-               			    var size = chartHeight / 13;
-               			    c.scales['y-axis-0'].options.ticks.minor.fontSize = size;
-           			    }
-      	  			}]
                                         });
 
                     //update strings
