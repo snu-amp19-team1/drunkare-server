@@ -1,7 +1,7 @@
 <!-- demo template comes here -->
 {% load static %}
 <!DOCTYPE html>
-<html class="uk-height-1-1">
+<html class="uk-height-1-1@m uk-background-primary">
     <head>
         <title>Drunkare-demo</title>
         <meta charset="utf-8">
@@ -13,29 +13,29 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
         <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     </head>
-    <body class="uk-height-1-1">
-        <div class="uk-grid-collapse uk-text-center uk-height-1-1" uk-grid>
-            <div class="uk-width-2-3@m uk-background-primary uk-height-1-1">
+    <body class="uk-height-1-1@m">
+        <div class="uk-grid uk-grid-collapse uk- uk-text-center uk-height-1-1@m">
+            <div class="uk-width-2-3@m uk-background-primary uk-height-1-1@m">
                 <!-- User 1 -->
-                <div class="uk-padding-small uk-background-muted" style="height: 45%">
+                <div class="uk-padding-small uk-background-muted uk-height-1-2@m">
                     <h1><span class="responsive-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
 		    <div><span class="responsive-small">{{user1.user_name}}'s recent activities ( <span id="time1"></span> )</span></div>
-		    <div class="uk-bacgrkound-muted" style="height: 70%">
+		    <div class="uk-bacgrkound-muted uk-height-7-10@m">
                       <canvas id="user1"></canvas>
 		    </div>
                 </div>
 
                 <!-- User 2 -->
-                <div class="uk-padding-small uk-light" style="height: 45%">
+                <div class="uk-padding-small uk-light uk-height-1-2@m">
                     <h1><span class="responsive-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
 		    <div><span class="responsive-small">{{user2.user_name}}'s recent activities ( <span id="time2"></span> )</span></div>
-		    <div class="uk-bacgrkound-primary" style="height: 70%">
+		    <div class="uk-bacgrkound-primary uk-height-7-10@m">
                       <canvas id="user2"></canvas>
 		    </div>
                 </div>
             </div>
-            <div class="uk-width-1-3@m uk-background-muted uk-height-1-1@m">
-                <div id="map" class="uk-height-1-1"></div>
+            <div class="uk-hidden@m uk-width-1-3@m uk-background-muted uk-height-1-1@m">
+                <div id="map" class="uk-height-1-1@m"></div>
                 <script>
                     // Initialize and add the map
                     function initMap() {
