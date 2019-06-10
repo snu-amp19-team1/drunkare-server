@@ -7122,6 +7122,12 @@ ul.uk-nav-sub {
   }
 }
 
+@media (max-width: 959px), (max-height: 539px) {
+  .uk-height-small\@s {
+    height: 300px;
+  }
+}
+
 /*
  * Useful to create image teasers
  */

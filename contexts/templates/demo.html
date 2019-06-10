@@ -1,7 +1,7 @@
 <!-- demo template comes here -->
 {% load static %}
 <!DOCTYPE html>
-<html class="uk-height-1-1@m uk-background-primary">
+<html class="uk-height-1-1@m">
     <head>
         <title>Drunkare-demo</title>
         <meta charset="utf-8">
@@ -20,7 +20,7 @@
                 <div class="uk-padding-small uk-background-muted uk-height-1-2@m">
                     <h1><span class="responsive-medium">{{ user1.user_name }} is in "<span id="context1"></span>" context</span></h1>
 		    <div><span class="responsive-small">{{user1.user_name}}'s recent activities ( <span id="time1"></span> )</span></div>
-		    <div class="uk-bacgrkound-muted uk-height-7-10@m">
+		    <div class="uk-bacgrkound-muted uk-height-7-10@m uk-height-small@s">
                       <canvas id="user1"></canvas>
 		    </div>
                 </div>
@@ -29,7 +29,7 @@
                 <div class="uk-padding-small uk-light uk-height-1-2@m">
                     <h1><span class="responsive-medium">{{ user2.user_name }} is in "<span id="context2"></span>" context</span></h1>
 		    <div><span class="responsive-small">{{user2.user_name}}'s recent activities ( <span id="time2"></span> )</span></div>
-		    <div class="uk-bacgrkound-primary uk-height-7-10@m">
+		    <div class="uk-bacgrkound-primary uk-height-7-10@m uk-height-small@s">
                       <canvas id="user2"></canvas>
 		    </div>
                 </div>
