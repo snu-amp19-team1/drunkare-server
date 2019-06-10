@@ -167,9 +167,14 @@
                                             scales:{
                                                 yAxes:[{
                                                     ticks:{
+							min: 0,
                                                         max: Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10,
+							    callback: function (value) {
+							      console.log(value / this.max * 100);
+							      return (value / this.max * 100).toFixed(0) + '%';
+							    },
 							stepSize: (Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10)/5,
-                                    			fontSize: 15,
+							fontSize: 15,
                                     			fontFamily: 'Karla'
                                                     }}
                                                 ],
@@ -211,6 +216,10 @@
                                                     yAxes:[{
                                                         ticks:{
                                                             max: Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10,
+							    callback: function (value) {
+							      console.log(value / this.max * 100);
+							      return (value / this.max * 100).toFixed(0) + '%';
+							    },
 							    stepSize: (Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10)/5,
                                         		    fontColor: "#FFFFFF",
                                         		    fontSize: 15,
