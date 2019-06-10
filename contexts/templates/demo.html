@@ -153,8 +153,9 @@
                                                 mode: 'index',
                                                 intersect: true,
                                                 callbacks: {
-                                                    label: function(items,data){
-                                                        return "";
+                                                    label: function(tooltipItem, data){
+							sum = updated_chart_data1.reduce((a,b) => a + b, 0);
+							return (tooltipItem.value/sum*100).toFixed(1) + '%';
                                                     }
                                                 },
                         			titleFontSize: 25,
@@ -168,12 +169,11 @@
                                                 yAxes:[{
                                                     ticks:{
 							min: 0,
-                                                        max: Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10,
-							    callback: function (value) {
-							      console.log(value / this.max * 100);
-							      return (value / this.max * 100).toFixed(0) + '%';
-							    },
-							stepSize: (Math.max(...updated_chart_data1)+10-Math.max(...updated_chart_data1)%10)/5,
+							max: updated_chart_data1.reduce((a,b) => a + b, 0),
+							callback: function (value) {
+							  return (value / this.max * 100).toFixed(0) + '%';
+							},
+							stepSize: updated_chart_data1.reduce((a,b) => a + b, 0) / 5,
 							fontSize: 15,
                                     			fontFamily: 'Karla'
                                                     }}
@@ -201,9 +201,10 @@
 						    mode: 'index',
 						    intersect: true,
 						    callbacks: {
-                                                    	label: function(items,data){
-                                                        return "";
-							}
+                                                        label: function(tooltipItem, data){
+							    sum = updated_chart_data2.reduce((a,b) => a + b, 0);
+							    return (tooltipItem.value/sum*100).toFixed(1) + '%';
+                                                        }
                                                     },
                                     		    titleFontSize: 25,
                                     		    titleFontFamily: 'Karla',
@@ -215,12 +216,12 @@
                                                 scales:{
                                                     yAxes:[{
                                                         ticks:{
-                                                            max: Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10,
+							    min: 0,
+							    max: updated_chart_data2.reduce((a,b) => a + b, 0),
 							    callback: function (value) {
-							      console.log(value / this.max * 100);
 							      return (value / this.max * 100).toFixed(0) + '%';
 							    },
-							    stepSize: (Math.max(...updated_chart_data2)+10-Math.max(...updated_chart_data2)%10)/5,
+							    stepSize: updated_chart_data2.reduce((a,b) => a + b, 0) / 5,
                                         		    fontColor: "#FFFFFF",
                                         		    fontSize: 15,
                                         		    fontFamily: 'Karla'
@@ -242,9 +243,11 @@
 
                     //update strings
                     time1=new Date(user1['last_update']).toString();
-                    $("#time1").text(String(time1).substring(0,time1.length-17) + " Updated");
+		    time1=time1.split("GMT")[0];
+		    $("#time1").text(String(time1) + " Updated");
                     time2=new Date(user2['last_update']).toString();
-                    $("#time2").text(String(time2).substring(0,time2.length-17) + " Updated");
+		    time2=time2.split("GMT")[0];
+		    $("#time2").text(String(time2) + " Updated");
 
                     if (user1['current_context'] == "drinking"){
                         $("#context1").css('font-weight','Bold');
