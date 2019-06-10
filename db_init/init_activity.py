@@ -2,7 +2,7 @@ from contexts.models import Activity
 Activity.objects.all().delete()
 activities = [
     'touching\nface', 
-    'jotting',
+    'pouring',
     'clinking',
     'drinking\n(w/o handle)',
     'pulling out\ntissue',
